@@ -1,0 +1,5599 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="build-version" content="BUILD 10.4 — Smart Enhancer Complete Intelligence">
+<title>GURU AI STUDIO — Prompt Engine</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --blue:#2563EB;
+    --blue-dark:#1D4ED8;
+    --teal:#14B8A6;
+    --orange:#F97316;
+    --green:#16A34A;
+    --red:#DC2626;
+    --purple:#7C3AED;
+
+    --bg:#F5F7FB;
+    --card:#FFFFFF;
+    --text:#172033;
+    --muted:#64748B;
+    --border:#E2E8F0;
+
+    --sidebar:270px;
+    --radius:18px;
+    --shadow:0 8px 30px rgba(15,23,42,.07);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Poppins",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:var(--sidebar);
+    height:100vh;
+    background:#fff;
+    border-right:1px solid var(--border);
+    z-index:1000;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    padding:24px 20px 18px;
+    border-bottom:1px solid var(--border);
+}
+
+.logo h1{
+    font-size:21px;
+    font-weight:800;
+    color:var(--blue);
+}
+
+.logo p{
+    margin-top:3px;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.creator{
+    display:inline-block;
+    margin-top:10px;
+    padding:5px 10px;
+    border-radius:20px;
+    background:#EFF6FF;
+    color:var(--blue);
+    font-size:10px;
+    font-weight:700;
+}
+
+.nav{
+    flex:1;
+    overflow-y:auto;
+    padding:14px 10px;
+}
+
+.nav-section{
+    margin:15px 10px 7px;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    color:#94A3B8;
+    letter-spacing:.7px;
+}
+
+.nav button{
+    width:100%;
+    border:none;
+    background:transparent;
+    text-align:left;
+    padding:11px 13px;
+    margin-bottom:3px;
+    border-radius:11px;
+    cursor:pointer;
+    color:#475569;
+    font-size:12px;
+    transition:.2s;
+}
+
+.nav button:hover{
+    background:#F1F5F9;
+    color:var(--blue);
+}
+
+.nav button.active{
+    background:#EFF6FF;
+    color:var(--blue);
+    font-weight:600;
+}
+
+.sidebar-footer{
+    padding:15px;
+    border-top:1px solid var(--border);
+    font-size:10px;
+    color:#94A3B8;
+    text-align:center;
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+    margin-left:var(--sidebar);
+    min-height:100vh;
+}
+
+.topbar{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:900;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.menu-toggle{
+    display:none;
+    border:none;
+    background:#EFF6FF;
+    color:var(--blue);
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.page-title{
+    font-size:18px;
+    font-weight:700;
+}
+
+.page-subtitle{
+    font-size:11px;
+    color:var(--muted);
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.status{
+    font-size:10px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#F0FDF4;
+    color:var(--green);
+}
+
+/* =========================
+CONTENT
+========================= */
+
+.content{
+    padding:28px;
+    max-width:1450px;
+    margin:auto;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* =========================
+HERO
+========================= */
+
+.hero{
+    background:linear-gradient(135deg,#2563EB 0%,#14B8A6 100%);
+    color:#fff;
+    padding:32px;
+    border-radius:24px;
+    margin-bottom:24px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero h2{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    max-width:850px;
+    font-size:13px;
+    line-height:1.7;
+    opacity:.94;
+}
+
+/* =========================
+CARDS
+========================= */
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px;
+    margin-bottom:18px;
+}
+
+.card-title{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.card-desc{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+/* =========================
+STUDIO GRID
+========================= */
+
+.studio-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.studio-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.studio-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+    border-color:#BFDBFE;
+}
+
+.studio-icon{
+    font-size:27px;
+    margin-bottom:12px;
+}
+
+.studio-card h3{
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.studio-card p{
+    font-size:10px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+/* =========================
+FORM
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-grid.three{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:11px;
+    font-weight:600;
+    color:#334155;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 12px;
+    background:#fff;
+    color:var(--text);
+    font-size:11px;
+    outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#93C5FD;
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+    line-height:1.6;
+}
+
+.help{
+    font-size:9px;
+    color:#94A3B8;
+}
+
+/* =========================
+BUTTON
+========================= */
+
+.btn{
+    border:none;
+    border-radius:10px;
+    padding:11px 17px;
+    font-size:11px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn-primary{
+    background:var(--blue);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--blue-dark);
+}
+
+.btn-secondary{
+    background:#F1F5F9;
+    color:#475569;
+}
+
+.btn-success{
+    background:var(--green);
+    color:#fff;
+}
+
+.btn-orange{
+    background:var(--orange);
+    color:#fff;
+}
+
+.btn-purple{
+    background:var(--purple);
+    color:#fff;
+}
+
+.btn-danger{
+    background:#FEF2F2;
+    color:var(--red);
+}
+
+.action-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:16px;
+}
+
+/* =========================
+STUDIO SELECTOR
+========================= */
+
+.studio-selector{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.studio-option{
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:12px;
+    padding:13px;
+    cursor:pointer;
+    transition:.2s;
+    text-align:left;
+}
+
+.studio-option:hover{
+    border-color:#93C5FD;
+}
+
+.studio-option.active{
+    background:#EFF6FF;
+    border-color:#60A5FA;
+}
+
+.studio-option strong{
+    display:block;
+    font-size:11px;
+    margin-bottom:3px;
+}
+
+.studio-option span{
+    font-size:9px;
+    color:var(--muted);
+}
+
+/* =========================
+SMART STUDIO FIELDS — BUILD 4
+========================= */
+
+.smart-studio-fields{
+    margin-top:18px;
+    border:1px solid #BFDBFE;
+    background:#F8FBFF;
+}
+
+.smart-studio-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:16px;
+}
+
+.smart-studio-badge{
+    padding:5px 10px;
+    border-radius:20px;
+    background:#EFF6FF;
+    color:var(--blue);
+    font-size:9px;
+    font-weight:700;
+}
+
+.smart-fields-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:13px;
+}
+
+.smart-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.smart-field.full{
+    grid-column:1/-1;
+}
+
+.choice-field{
+    grid-column:1/-1;
+}
+
+.choice-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.choice-option{
+    border:1px solid #E5E7EB;
+    background:#FFFFFF;
+    color:#374151;
+    border-radius:10px;
+    padding:8px 11px;
+    font-size:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.15s ease;
+}
+
+.choice-option:hover{
+    border-color:#2563EB;
+    transform:translateY(-1px);
+}
+
+.choice-option.active{
+    border-color:#2563EB;
+    background:#EFF6FF;
+    color:#1D4ED8;
+}
+
+.choice-custom{
+    margin-top:8px;
+}
+
+.choice-help{
+    font-size:9px;
+    color:#6B7280;
+    margin-bottom:6px;
+}
+
+.smart-field-note{
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:#F0FDFA;
+    color:#0F766E;
+    font-size:9px;
+    line-height:1.6;
+}
+
+
+/* GAME STUDIO — choice cards */
+.choice-field .choice-options{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(125px,1fr));
+    gap:8px;
+}
+.choice-field .choice-option{
+    min-height:40px;
+    text-align:center;
+    padding:9px 10px;
+    border:1px solid #DCE3EC;
+    background:#FFFFFF;
+    border-radius:12px;
+    font-size:10px;
+    font-weight:600;
+}
+.choice-field .choice-option.active{
+    border-color:#2563EB;
+    background:#EFF6FF;
+    color:#1D4ED8;
+    box-shadow:0 0 0 2px rgba(37,99,235,.08);
+}
+
+@media(max-width:900px){
+    .smart-fields-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* =========================
+MODE
+========================= */
+
+.mode-group{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.mode{
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:20px;
+    padding:8px 14px;
+    cursor:pointer;
+    font-size:10px;
+}
+
+.mode.active{
+    background:#EFF6FF;
+    color:var(--blue);
+    border-color:#93C5FD;
+    font-weight:600;
+}
+
+/* =========================
+PROMPT OUTPUT
+========================= */
+
+.prompt-result{
+    display:none;
+}
+
+.prompt-result.show{
+    display:block;
+}
+
+.result-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.result-title{
+    font-size:14px;
+    font-weight:700;
+}
+
+.prompt-box{
+    background:#0F172A;
+    color:#E2E8F0;
+    border-radius:15px;
+    padding:20px;
+    position:relative;
+}
+
+.prompt-box textarea{
+    background:transparent;
+    border:none;
+    color:#E2E8F0;
+    min-height:420px;
+    font-family:Consolas,monospace;
+    font-size:11px;
+    line-height:1.75;
+    resize:vertical;
+    box-shadow:none;
+}
+
+.prompt-box textarea:focus{
+    box-shadow:none;
+    border:none;
+}
+
+.prompt-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:13px;
+}
+
+.meta{
+    background:#F1F5F9;
+    color:#475569;
+    padding:5px 9px;
+    border-radius:15px;
+    font-size:9px;
+}
+
+.meta.blue{
+    background:#EFF6FF;
+    color:var(--blue);
+}
+
+.meta.green{
+    background:#F0FDF4;
+    color:var(--green);
+}
+
+/* =========================
+CONTEXT SUMMARY
+========================= */
+
+.context-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.context-item{
+    background:#F8FAFC;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px;
+}
+
+.context-item small{
+    display:block;
+    color:#94A3B8;
+    font-size:8px;
+    margin-bottom:3px;
+}
+
+.context-item strong{
+    font-size:10px;
+}
+
+/* =========================
+FEATURE LIST
+========================= */
+
+.feature-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.feature{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    padding:10px;
+    background:#F8FAFC;
+    border-radius:10px;
+}
+
+.feature-icon{
+    font-size:15px;
+}
+
+.feature-text{
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* =========================
+EMPTY
+========================= */
+
+.empty{
+    text-align:center;
+    padding:70px 20px;
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+.empty h3{
+    color:var(--text);
+    margin-bottom:7px;
+}
+
+/* =========================
+OVERLAY
+========================= */
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.35);
+    z-index:999;
+}
+
+.overlay.show{
+    display:block;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1150px){
+
+    .studio-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .studio-selector{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .context-summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 16px;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .studio-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid,
+    .form-grid.three{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:560px){
+
+    .studio-grid,
+    .studio-selector,
+    .feature-list,
+    .context-summary{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:23px;
+    }
+
+    .hero h2{
+        font-size:21px;
+    }
+
+    .result-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .action-row{
+        flex-direction:column;
+    }
+}
+.smart-suggestions-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:14px}.smart-suggestion-item{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #E2E8F0;border-radius:12px;background:#fff;margin-bottom:8px}.smart-suggestion-icon{font-size:20px;min-width:28px;text-align:center}.smart-suggestion-body{flex:1;font-size:10px;line-height:1.55;color:#64748B}.smart-suggestion-body strong{display:block;font-size:11px;color:#172033;margin-bottom:2px}.smart-suggestion-item .btn{white-space:nowrap}@media(max-width:700px){.smart-suggestions-head{flex-direction:column}.smart-suggestion-item{align-items:flex-start;flex-wrap:wrap}.smart-suggestion-item .btn{width:100%}}
+
+/* BUILD 18 — Settings compact preference */
+body.settings-compact .card{padding:16px;}
+body.settings-compact .hero{padding:20px;}
+body.settings-compact .form-group{margin-bottom:10px;}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        <h1>GURU AI STUDIO</h1>
+        <p>AI-Powered Learning & Media Creator</p>
+        <span class="creator">Design By : ZP</span>
+    </div>
+
+    <nav class="nav">
+
+        <div class="nav-section">Workspace</div>
+
+        <button data-page="dashboard" onclick="navigate('dashboard')">
+            🏠 Dashboard
+        </button>
+
+        <button data-page="idea" onclick="navigate('idea')">
+            💡 One Idea → All Media
+        </button>
+
+        <button data-page="templates" onclick="navigate('templates')">
+            🎯 Quick Templates
+        </button>
+
+        <div class="nav-section">Teaching Studio</div>
+
+        <button data-page="learning" onclick="navigate('learning')">
+            📚 Learning Studio
+        </button>
+
+        <button data-page="assessment" onclick="navigate('assessment')">
+            📝 Assessment Studio
+        </button>
+
+        <button data-page="virtual-lab" onclick="navigate('virtual-lab')">
+            🔬 Virtual Lab
+        </button>
+
+        <div class="nav-section">Creative Studio</div>
+
+        <button data-page="image" onclick="navigate('image')">
+            🎨 Image Studio
+        </button>
+
+        <button data-page="video" onclick="navigate('video')">
+            🎬 Video / Flow Studio
+        </button>
+
+        <button data-page="comic" onclick="navigate('comic')">
+            📖 Comic Studio
+        </button>
+
+        <button data-page="narration" onclick="navigate('narration')">
+            🎙️ Audio & Narration
+        </button>
+
+        <button data-page="ppt" onclick="navigate('ppt')">
+            🎞️ PPT Studio
+        </button>
+
+        <button data-page="game" onclick="navigate('game')">
+            🎮 Game Studio
+        </button>
+
+        <button data-page="simulation" onclick="navigate('simulation')">
+            🧪 Simulation Studio
+        </button>
+
+        <div class="nav-section">AI Tools</div>
+
+        <button data-page="optimizer" onclick="navigate('optimizer')">
+            ✨ Prompt Optimizer
+        </button>
+
+        <button data-page="library" onclick="navigate('library')">
+            📚 Prompt Library
+        </button>
+
+        <button data-page="safety" onclick="navigate('safety')">
+            🛡️ Copyright & Safety
+        </button>
+
+        <button data-page="settings" onclick="navigate('settings')">
+            ⚙️ Settings
+        </button>
+
+        <button data-page="about" onclick="navigate('about')">
+            👤 Tentang Perancang
+        </button>
+
+    </nav>
+
+    <div class="sidebar-footer">
+        GURU AI STUDIO<br>
+        <strong>Design By : ZP</strong>
+    </div>
+
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+
+<!-- =====================================================
+MAIN
+===================================================== -->
+
+<main class="main">
+
+<header class="topbar">
+
+    <div class="topbar-left">
+
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div>
+            <div class="page-title" id="pageTitle">
+                Dashboard
+            </div>
+
+            <div class="page-subtitle" id="pageSubtitle">
+                Satu Ide Guru, Beragam Media Pembelajaran.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <span class="status" id="status">
+            ● Prompt Engine Ready
+        </span>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
+
+<section class="page active" id="page-dashboard">
+
+    <div class="hero">
+
+        <h2>GURU AI STUDIO 🚀</h2>
+
+        <p>
+            Sekarang GURU AI STUDIO sudah memiliki Prompt Engine.
+            Satu konteks pembelajaran dapat diubah menjadi prompt
+            khusus untuk berbagai kebutuhan guru.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            🧠 Prompt Engine
+        </div>
+
+        <div class="card-desc">
+            Mesin prompt akan membaca Universal Context yang sedang aktif
+            kemudian menyusunnya menjadi prompt yang sesuai dengan
+            studio yang dipilih.
+        </div>
+
+        <div class="feature-list">
+
+            <div class="feature">
+                <div class="feature-icon">📚</div>
+                <div class="feature-text">
+                    Learning Prompt — pembelajaran, LKPD dan bahan ajar.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📝</div>
+                <div class="feature-text">
+                    Assessment Prompt — asesmen, HOTS, AKM dan rubrik.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-text">
+                    Image Prompt — visual pembelajaran original.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🎬</div>
+                <div class="feature-text">
+                    Video Prompt — video dan storyboard.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📖</div>
+                <div class="feature-text">
+                    Comic Prompt — karakter dan panel konsisten.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🎮</div>
+                <div class="feature-text">
+                    Game Prompt — game edukasi interaktif.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🧪</div>
+                <div class="feature-text">
+                    Simulation Prompt — simulasi HTML/CSS/JS.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔬</div>
+                <div class="feature-text">
+                    Virtual Lab Prompt — praktikum virtual.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-row">
+
+            <button class="btn btn-primary"
+                    onclick="navigate('idea')">
+                💡 Mulai dari Ide
+            </button>
+
+            <button class="btn btn-success"
+                    onclick="navigate('learning')">
+                📚 Buka Prompt Studio
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+IDEA
+===================================================== -->
+
+<section class="page" id="page-idea">
+
+    <div class="hero">
+
+        <h2>💡 One Idea → All Media</h2>
+
+        <p>
+            Tuliskan ide guru secara sederhana. Ide tersebut
+            menjadi titik awal untuk membangun konteks dan
+            berbagai prompt pembelajaran.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            Ide Pembelajaran
+        </div>
+
+        <div class="card-desc">
+            Tidak perlu menulis prompt. Cukup jelaskan apa yang
+            ingin Anda ajarkan.
+        </div>
+
+        <div class="form-group">
+
+            <label>Ide Guru</label>
+
+            <textarea
+                id="ideaInput"
+                placeholder="Contoh: Saya ingin mengajarkan korosi kepada siswa kelas XI dengan konteks lingkungan pesisir."
+            ></textarea>
+
+        </div>
+
+        <div class="action-row">
+
+            <button class="btn btn-primary"
+                    onclick="useIdea()">
+                Gunakan Ide →
+            </button>
+
+            <button class="btn btn-secondary"
+                    onclick="document.getElementById('ideaInput').value=''">
+                Bersihkan
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+PROMPT STUDIO
+===================================================== -->
+
+<section class="page" id="page-learning">
+
+    <div class="hero">
+
+        <h2>⚡ Prompt Studio</h2>
+
+        <p>
+            Pilih jenis output, mode prompt, lalu generate.
+            Konteks pembelajaran yang sedang aktif akan digunakan
+            secara otomatis.
+        </p>
+
+    </div>
+
+
+    <!-- CONTEXT -->
+    <div class="card">
+
+        <div class="card-title">
+            📌 Universal Context
+        </div>
+
+        <div class="card-desc">
+            Prompt Engine menggunakan konteks yang telah disimpan.
+        </div>
+
+        <div id="contextSummary"
+             class="context-summary">
+        </div>
+
+        <div class="action-row">
+
+            <button class="btn btn-secondary"
+                    onclick="navigate('context')">
+                ⚙️ Kelola Konteks
+            </button>
+
+        </div>
+
+        <div style="margin-top:16px;padding:14px;border:1px solid #DCEBFF;border-radius:12px;background:#F8FBFF;">
+            <div style="font-size:11px;font-weight:700;margin-bottom:5px;">🧩 Pendekatan Tambahan</div>
+            <div style="font-size:9px;color:#64748B;margin-bottom:10px;line-height:1.5;">
+                Tambahkan STEM ke Universal Context tanpa mengubah model atau pendekatan lain yang sudah tersimpan.
+            </div>
+            <button id="stemToggleButton" class="btn btn-secondary" type="button" onclick="toggleSTEM()">
+                🔬 STEM
+            </button>
+            <span id="stemStatus" style="font-size:9px;color:#64748B;margin-left:8px;">Belum dipilih</span>
+        </div>
+
+        <div style="margin-top:12px;padding:14px;border:1px solid #E2E8F0;border-radius:12px;background:#FFFFFF;">
+            <div style="font-size:11px;font-weight:700;margin-bottom:5px;">🎯 Pendekatan Pembelajaran</div>
+            <div style="font-size:9px;color:#64748B;margin-bottom:10px;line-height:1.5;">
+                Pilih satu atau beberapa pendekatan. Pilihan ini disimpan ke Universal Context.
+            </div>
+            <div id="approachChoiceList" style="display:flex;flex-wrap:wrap;gap:7px;"></div>
+            <div id="approachChoiceStatus" style="font-size:9px;color:#64748B;margin-top:9px;">Belum ada pendekatan yang dipilih.</div>
+        </div>
+
+    </div>
+
+
+    <!-- STUDIO -->
+    <div class="card">
+
+        <div class="card-title">
+            01 — Pilih Output
+        </div>
+
+        <div class="card-desc">
+            Pilih studio yang ingin dibuatkan prompt.
+        </div>
+
+        <div class="studio-selector">
+
+            <button class="studio-option active"
+                    data-studio="learning"
+                    onclick="selectStudio('learning')">
+
+                <strong>📚 Learning</strong>
+                <span>Modul, LKPD, aktivitas</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="assessment"
+                    onclick="selectStudio('assessment')">
+
+                <strong>📝 Assessment</strong>
+                <span>Soal, HOTS, AKM, rubrik</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="image"
+                    onclick="selectStudio('image')">
+
+                <strong>🎨 Image</strong>
+                <span>Prompt gambar</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="video"
+                    onclick="selectStudio('video')">
+
+                <strong>🎬 Video / Flow</strong>
+                <span>Video dan storyboard</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="comic"
+                    onclick="selectStudio('comic')">
+
+                <strong>📖 Comic</strong>
+                <span>Komik edukasi</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="game"
+                    onclick="selectStudio('game')">
+
+                <strong>🎮 Game</strong>
+                <span>Game edukasi</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="simulation"
+                    onclick="selectStudio('simulation')">
+
+                <strong>🧪 Simulation</strong>
+                <span>Simulasi interaktif</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="virtualLab"
+                    onclick="selectStudio('virtualLab')">
+
+                <strong>🔬 Virtual Lab</strong>
+                <span>Praktikum virtual</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="optimizer"
+                    onclick="selectStudio('optimizer')">
+
+                <strong>✨ Prompt Optimizer</strong>
+                <span>Perbaiki dan strukturkan prompt</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="narration"
+                    onclick="selectStudio('narration')">
+
+                <strong>🎙️ Narration</strong>
+                <span>Narasi pembelajaran</span>
+
+            </button>
+
+            <button class="studio-option"
+                    data-studio="ppt"
+                    onclick="selectStudio('ppt')">
+
+                <strong>🎞️ PPT</strong>
+                <span>Presentasi pembelajaran</span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- SMART STUDIO FIELDS — BUILD 4 -->
+    <div class="card smart-studio-fields">
+
+        <div class="smart-studio-head">
+            <div>
+                <div class="card-title">⚙️ Smart Studio Fields</div>
+                <div class="card-desc">
+                    Pengaturan khusus studio. Opsional dan tidak menggantikan Universal Context BUILD 2.
+                </div>
+            </div>
+            <span class="smart-studio-badge" id="smartStudioBadge">⚙️ Learning</span>
+        </div>
+
+        <div id="smartStudioFields"></div>
+
+        <div class="smart-field-note">
+            💡 Data di sini disimpan terpisah dari <strong>guruAI_context</strong>.
+            Universal Context aktif tetap menjadi sumber konteks utama.
+        </div>
+
+    </div>
+
+
+    <!-- MODE -->
+    <div class="card">
+
+        <div class="card-title">
+            02 — Prompt Mode
+        </div>
+
+        <div class="card-desc">
+            Semakin tinggi mode, semakin detail instruksi yang
+            dihasilkan.
+        </div>
+
+        <div class="mode-group">
+
+            <button class="mode active"
+                    data-mode="simple"
+                    onclick="selectMode('simple')">
+                Simple
+            </button>
+
+            <button class="mode"
+                    data-mode="professional"
+                    onclick="selectMode('professional')">
+                Professional
+            </button>
+
+            <button class="mode"
+                    data-mode="expert"
+                    onclick="selectMode('expert')">
+                Expert
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- EXTRA INSTRUCTION -->
+    <div class="card">
+
+        <div class="card-title">
+            03 — Instruksi Tambahan
+        </div>
+
+        <div class="card-desc">
+            Opsional. Tambahkan kebutuhan khusus tanpa mengubah
+            konteks utama.
+        </div>
+
+        <textarea
+            id="extraInstruction"
+            placeholder="Contoh: Buat aktivitas yang cocok untuk siswa di daerah pesisir dengan fasilitas sekolah terbatas."
+        ></textarea>
+
+        <div class="action-row">
+
+            <button class="btn btn-primary"
+                    onclick="generatePrompt()">
+                ✨ Generate Prompt
+            </button>
+
+            <button class="btn btn-secondary"
+                    onclick="clearExtra()">
+                Bersihkan
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+    <div id="smartSuggestionsPanel" class="card" style="display:none;margin-top:18px;border-color:#C7D2FE;background:#FAFAFF;"><div class="smart-suggestions-head"><div><div class="card-title">💡 Smart Prompt Suggestions</div><div class="card-desc" style="margin-bottom:0;">Saran otomatis berdasarkan struktur prompt. Prompt tidak diubah sebelum Anda memilih <strong>+ Terapkan Saran</strong>.</div></div><button class="btn btn-secondary" type="button" onclick="toggleSmartSuggestions()">Tutup</button></div><div id="smartSuggestionsList"></div></div>
+
+<div class="card prompt-result"
+         id="promptResult">
+
+        <div class="result-header">
+
+            <div>
+                <div class="result-title">
+                    ✨ Prompt Siap Digunakan
+                </div>
+
+                <div class="help">
+                    Prompt dapat langsung disalin ke AI pilihan Anda.
+                </div>
+            </div>
+
+            <div class="prompt-meta">
+
+                <span class="meta blue"
+                      id="resultStudio">
+                    Learning
+                </span>
+
+                <span class="meta green"
+                      id="resultMode">
+                    Simple
+                </span>
+
+            </div>
+
+        </div>
+
+        <div id="copyrightGuard" style="display:none;margin:14px 0;padding:14px;border:1px solid #DCEBFF;border-radius:12px;background:#F8FBFF;">
+
+            <div style="font-weight:700;margin-bottom:6px;">🛡️ Copyright & Safety Guard</div>
+            <div id="copyrightGuardStatus" style="font-size:13px;line-height:1.6;"></div>
+            <div id="safetyGuardStatus" style="font-size:13px;line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid #E2E8F0;"></div>
+
+        </div>
+
+        <div id="promptQualityChecker" style="display:none;margin:14px 0;padding:14px;border:1px solid #DCEBFF;border-radius:12px;background:#F8FBFF;">
+            <div style="font-weight:700;margin-bottom:6px;">📊 Prompt Quality Checker</div>
+            <div id="promptQualityScore" style="font-size:20px;font-weight:800;margin-bottom:8px;"></div>
+            <div id="promptQualitySummary" style="font-size:12px;color:#475569;line-height:1.5;margin-bottom:10px;"></div>
+            <div id="promptQualityItems" style="font-size:12px;line-height:1.7;"></div>
+            <div id="promptQualityTips" style="margin-top:10px;padding-top:10px;border-top:1px solid #E2E8F0;font-size:12px;line-height:1.6;"></div>
+        </div>
+
+        <div class="prompt-box">
+
+            <textarea
+                id="promptOutput"
+                spellcheck="false">
+            </textarea>
+
+        </div>
+
+        <div id="promptActionCenter" style="margin:16px 0;padding:16px;border:1px solid #DCEBFF;border-radius:14px;background:linear-gradient(180deg,#F8FBFF,#FFFFFF);">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                <div><div style="font-size:15px;font-weight:800;">🎯 Prompt Action Center</div><div id="promptActionSummary" style="font-size:11px;color:#64748B;margin-top:4px;">Prompt siap digunakan setelah Generate Prompt.</div></div>
+                <span id="promptActionStatus" style="font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;background:#E2E8F0;color:#475569;">Belum ada prompt</span>
+            </div>
+            <div id="promptPreviewBox" style="display:none;margin-top:12px;padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#FFFFFF;max-height:260px;overflow:auto;white-space:pre-wrap;font-size:12px;line-height:1.6;"></div>
+            <div class="action-row" style="margin-top:12px;">
+                <button class="btn btn-secondary" type="button" onclick="togglePromptPreview()">👁️ Preview</button>
+                <button class="btn btn-primary" type="button" onclick="copyPrompt()">📋 Copy</button>
+                <button class="btn btn-purple" type="button" onclick="openSmartEnhancer()">✨ Optimize</button>
+                <button class="btn btn-success" type="button" onclick="savePromptToLibrary()">💾 Simpan</button>
+                <button class="btn btn-orange" type="button" onclick="generatePrompt()">🔄 Generate Ulang</button>
+                <button class="btn btn-secondary" type="button" onclick="editPrompt()">✏️ Edit</button>
+                <button class="btn btn-secondary" type="button" onclick="togglePromptHistory()">🕘 Riwayat</button>
+                <button class="btn btn-secondary" type="button" onclick="togglePromptCompare()">🆚 Compare</button>
+                <button class="btn btn-secondary" type="button" onclick="togglePromptExport()">📤 Export</button>
+                <button class="btn btn-primary" type="button" onclick="togglePromptWorkspace()">🧩 Workspace</button>
+            </div>
+
+
+            <div id="promptWorkspacePanel" style="display:none;margin-top:14px;padding:16px;border:1px solid #BFDBFE;border-radius:14px;background:linear-gradient(180deg,#EFF6FF,#FFFFFF);">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <div>
+                        <div style="font-size:15px;font-weight:800;">🧩 Prompt Workspace</div>
+                        <div style="font-size:10px;color:#64748B;margin-top:4px;line-height:1.5;">Satu ruang kerja untuk melihat versi asli, mengedit prompt, lalu membuka Preview, Compare, Optimize, atau Export tanpa mengubah alur kerja yang sudah ada.</div>
+                    </div>
+                    <span id="workspaceStatus" style="font-size:10px;font-weight:700;padding:5px 9px;border-radius:999px;background:#E0F2FE;color:#0369A1;">Workspace siap</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px;">
+                    <div>
+                        <div style="font-size:11px;font-weight:800;margin-bottom:6px;">📌 Prompt Original</div>
+                        <div id="workspaceOriginal" style="min-height:170px;max-height:360px;overflow:auto;padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#FFFFFF;white-space:pre-wrap;font-size:11px;line-height:1.55;color:#334155;"></div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;font-weight:800;margin-bottom:6px;">✏️ Prompt Editor</div>
+                        <div style="font-size:9px;color:#64748B;margin-bottom:6px;">Editor utama tetap menggunakan kotak Prompt Siap Digunakan di atas.</div>
+                        <button class="btn btn-primary" type="button" onclick="focusPromptWorkspaceEditor()">✏️ Fokus ke Editor</button>
+                    </div>
+                </div>
+                <div style="margin-top:14px;padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#FFFFFF;">
+                    <div style="font-size:11px;font-weight:800;margin-bottom:8px;">⚡ Aksi Workspace</div>
+                    <div class="action-row">
+                        <button class="btn btn-secondary" type="button" onclick="togglePromptPreview()">👁️ Preview</button>
+                        <button class="btn btn-secondary" type="button" onclick="togglePromptCompare()">🆚 Compare</button>
+                        <button class="btn btn-purple" type="button" onclick="openSmartEnhancer()">✨ Optimize</button>
+                        <button class="btn btn-secondary" type="button" onclick="togglePromptExport()">📤 Export</button>
+                        <button class="btn btn-secondary" type="button" onclick="toggleSmartSuggestions()">💡 Suggestions</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="promptComparePanel" style="display:none;margin-top:14px;padding:14px;border:1px solid #E2E8F0;border-radius:12px;background:#FFFFFF;">
+                <div style="font-size:13px;font-weight:800;">🆚 Prompt Compare</div>
+                <div style="font-size:10px;color:#64748B;margin-top:4px;line-height:1.5;">Bandingkan prompt asli hasil Generate dengan prompt yang sedang Anda kerjakan. Fitur ini tidak mengubah isi prompt.</div>
+                <div id="promptCompareSummary" style="margin-top:10px;padding:10px;border-radius:10px;background:#F8FAFC;font-size:11px;color:#475569;line-height:1.5;"></div>
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px;">
+                    <div>
+                        <div style="font-size:11px;font-weight:800;margin-bottom:6px;">📌 Versi Asli</div>
+                        <div id="promptCompareOriginal" style="padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#FFFFFF;max-height:300px;overflow:auto;white-space:pre-wrap;font-size:11px;line-height:1.55;"></div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;font-weight:800;margin-bottom:6px;">✨ Versi Saat Ini</div>
+                        <div id="promptCompareCurrent" style="padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#FFFFFF;max-height:300px;overflow:auto;white-space:pre-wrap;font-size:11px;line-height:1.55;"></div>
+                    </div>
+                </div>
+                <div class="action-row" style="margin-top:12px;">
+                    <button class="btn btn-secondary" type="button" onclick="togglePromptCompare()">Tutup</button>
+                </div>
+            </div>
+
+            <div id="promptExportPanel" style="display:none;margin-top:14px;padding:14px;border:1px solid #E2E8F0;border-radius:12px;background:#FFFFFF;">
+                <div style="font-size:13px;font-weight:800;">📤 Prompt Export Center</div>
+                <div style="font-size:10px;color:#64748B;margin-top:4px;line-height:1.5;">Bawa prompt hasil kerja Anda ke luar GURU AI STUDIO tanpa mengubah isi prompt.</div>
+                <div class="action-row" style="margin-top:12px;">
+                    <button class="btn btn-primary" type="button" onclick="exportPromptTxt()">📄 TXT</button>
+                    <button class="btn btn-secondary" type="button" onclick="exportPromptWord()">📝 Word</button>
+                    <button class="btn btn-secondary" type="button" onclick="exportPromptPdf()">📕 PDF / Cetak</button>
+                    <button class="btn btn-secondary" type="button" onclick="togglePromptExport()">Tutup</button>
+                </div>
+                <div id="promptExportStatus" style="font-size:10px;color:#64748B;margin-top:10px;"></div>
+            </div>
+
+            <div id="promptHistoryPanel" style="display:none;margin-top:14px;padding:14px;border:1px solid #E2E8F0;border-radius:12px;background:#FFFFFF;">
+                <div style="font-size:13px;font-weight:800;">🕘 Riwayat Prompt</div>
+                <div style="font-size:10px;color:#64748B;margin-top:4px;line-height:1.5;">Simpan beberapa versi prompt secara lokal agar perubahan dari Generate, Edit, atau Optimize tetap dapat dikembalikan.</div>
+                <div id="promptHistoryList" style="margin-top:12px;"></div>
+                <div class="action-row" style="margin-top:12px;">
+                    <button class="btn btn-secondary" type="button" onclick="clearPromptHistory()">🗑️ Hapus Riwayat</button>
+                    <button class="btn btn-secondary" type="button" onclick="togglePromptHistory()">Tutup</button>
+                </div>
+            </div>
+
+            <div id="smartEnhancerPanel" style="display:none;margin-top:14px;padding:14px;border:1px solid #E2E8F0;border-radius:12px;background:#FFFFFF;">
+                <div style="font-size:13px;font-weight:800;">✨ Smart Prompt Enhancer</div>
+                <div style="font-size:10px;color:#64748B;margin-top:4px;line-height:1.5;">Pilih penguatan yang diperlukan. Prompt asli tetap aman sampai Anda memilih Terapkan.</div>
+                <div id="smartEnhancerChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px;"></div>
+                <div id="smartEnhancerPreview" style="display:none;margin-top:12px;padding:12px;border:1px solid #E2E8F0;border-radius:10px;background:#F8FAFC;white-space:pre-wrap;font-size:11px;line-height:1.6;max-height:240px;overflow:auto;"></div>
+                <div class="action-row" style="margin-top:12px;">
+                    <button class="btn btn-purple" type="button" onclick="previewSmartEnhancement()">👁️ Preview Hasil</button>
+                    <button class="btn btn-success" type="button" onclick="applySmartEnhancement()">✓ Terapkan</button>
+                    <button class="btn btn-secondary" type="button" onclick="closeSmartEnhancer()">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+CONTEXT PAGE
+===================================================== -->
+
+<section class="page" id="page-context">
+
+    <div class="hero">
+
+        <h2>⚙️ Universal Context</h2>
+
+        <p>
+            Kelola konteks pembelajaran yang menjadi sumber data
+            seluruh Prompt Engine.
+        </p>
+
+    </div>
+
+    <div class="card">
+        <div class="card-title">📝 Context Editor</div>
+        <div class="card-desc">
+            Universal Context adalah konteks proyek yang sedang aktif.
+            Data tidak ditanam sebagai konteks permanen di aplikasi.
+        </div>
+
+        <div class="form-group"><label>Jenjang</label>
+            <select id="ctxJenjang"><option value="">Pilih Jenjang</option><option>SD</option><option>SMP</option><option>SMA</option><option>SMK</option></select>
+        </div>
+        <div class="form-group"><label>Fase</label><input id="ctxFase" type="text" placeholder="Contoh: Fase E"></div>
+        <div class="form-group"><label>Kelas</label><input id="ctxKelas" type="text" placeholder="Contoh: Kelas 10"></div>
+        <div class="form-group"><label>Mata Pelajaran</label><input id="ctxMapel" type="text" placeholder="Contoh: Kimia"></div>
+        <div class="form-group"><label>Materi</label><input id="ctxMateri" type="text" placeholder="Contoh: Termokimia"></div>
+        <div class="form-group"><label>Submateri</label><input id="ctxSubmateri" type="text" placeholder="Contoh: Reaksi Eksoterm dan Endoterm"></div>
+        <div class="form-group"><label>Konteks Kehidupan Nyata</label><textarea id="ctxKonteks" placeholder="Contoh: fenomena hujan di lingkungan sekitar siswa"></textarea></div>
+        <div class="form-group"><label>Alokasi Waktu</label><input id="ctxAlokasi" type="text" placeholder="Contoh: 2 JP"></div>
+        <div class="form-group"><label>Kurikulum</label><select id="ctxKurikulum"><option>Kurikulum Merdeka</option><option>Kurikulum 2013</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>CP</label><textarea id="ctxCP" placeholder="Capaian Pembelajaran (opsional)"></textarea></div>
+        <div class="form-group"><label>TP</label><textarea id="ctxTP" placeholder="Tujuan Pembelajaran (opsional)"></textarea></div>
+        <div class="form-group"><label>ATP</label><textarea id="ctxATP" placeholder="Alur Tujuan Pembelajaran (opsional)"></textarea></div>
+        <div class="form-group"><label>Model Pembelajaran</label><input id="ctxModel" type="text" placeholder="Contoh: PBL, PJBL, Discovery"></div>
+
+        <div class="action-row">
+            <button class="btn btn-primary" type="button" onclick="saveUniversalContext()">💾 Simpan Context</button>
+            <button class="btn btn-secondary" type="button" onclick="newUniversalContext()">🆕 Konteks Baru</button>
+            <button class="btn btn-secondary" type="button" onclick="loadContextIntoEditor()">↻ Muat Context Aktif</button>
+        </div>
+        <div id="contextEditorStatus" class="help" style="margin-top:10px;">Belum ada perubahan.</div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+OTHER PAGES
+===================================================== -->
+
+<section class="page" id="page-assessment">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">📝</div>
+            <h3>Assessment Studio</h3>
+            <p>Gunakan Prompt Studio untuk menghasilkan Assessment Prompt.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('assessment')">
+                Buka Assessment Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-image">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🎨</div>
+            <h3>Image Studio</h3>
+            <p>Prompt gambar akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('image')">
+                Buka Image Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-video">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🎬</div>
+            <h3>Video / Flow Studio</h3>
+            <p>Prompt video dan storyboard akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('video')">
+                Buka Video Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-comic">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">📖</div>
+            <h3>Comic Studio</h3>
+            <p>Prompt komik edukasi akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('comic')">
+                Buka Comic Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-game">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🎮</div>
+            <h3>Game Studio</h3>
+            <p>Prompt game edukasi akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('game')">
+                Buka Game Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-simulation">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🧪</div>
+            <h3>Simulation Studio</h3>
+            <p>Prompt simulasi interaktif akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('simulation')">
+                Buka Simulation Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-virtual-lab">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🔬</div>
+            <h3>Virtual Lab</h3>
+            <p>Prompt laboratorium virtual akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('virtualLab')">
+                Buka Virtual Lab Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-narration">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🎙️</div>
+            <h3>Audio & Narration</h3>
+            <p>Prompt narasi akan dihasilkan melalui Prompt Engine.</p>
+            <button class="btn btn-primary"
+                    onclick="openStudio('narration')">
+                Buka Narration Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-ppt">
+    <div class="card">
+        <div class="empty">
+            <div class="empty-icon">🎞️</div>
+            <h3>PPT Studio</h3>
+            <p>Buat prompt presentasi pembelajaran yang terstruktur dan siap dikembangkan di PowerPoint, Canva, atau aplikasi presentasi lainnya.</p>
+            <button class="btn btn-primary" onclick="openStudio('ppt')">
+                Buka PPT Prompt
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<section class="page" id="page-optimizer">
+    <div class="card">
+
+        <div class="card-title">
+            ✨ Prompt Optimizer
+        </div>
+
+        <div class="card-desc">
+            Masukkan prompt yang ingin diperbaiki.
+        </div>
+
+        <div class="smart-studio-head" style="margin-top:18px;">
+            <div>
+                <div class="card-title">⚙️ Smart Optimizer Fields</div>
+                <div class="card-desc">
+                    Tidak tahu istilah prompt engineering? Tinggal pilih.
+                    Pengaturan ini tersimpan terpisah dari Universal Context.
+                </div>
+            </div>
+            <span class="smart-studio-badge">✨ Optimizer</span>
+        </div>
+
+        <div id="optimizerSmartStudioFields" style="margin-bottom:18px;"></div>
+
+        <div class="action-row">
+
+            <button class="btn btn-purple"
+                    onclick="optimizePrompt()">
+                ✨ Optimalkan Prompt
+            </button>
+
+        </div>
+
+        <div id="optimizerResult"
+             style="display:none;margin-top:18px;">
+
+            <textarea
+                id="optimizerOutput"
+                style="min-height:300px;">
+            </textarea>
+
+            <div class="action-row">
+
+                <button class="btn btn-primary"
+                        onclick="copyText('optimizerOutput')">
+                    📋 Copy
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<section class="page" id="page-library">
+    <div class="hero">
+        <h2>📚 Prompt Library</h2>
+        <p>Simpan prompt yang sudah dibuat agar dapat digunakan kembali kapan saja.</p>
+    </div>
+    <div class="card">
+        <div class="card-title">🔎 Cari Prompt</div>
+        <div class="card-desc">Ketik kata kunci untuk mencari judul, studio, atau isi prompt.</div>
+        <input id="librarySearch" type="text" placeholder="Contoh: termokimia, video, limbah kelapa..." oninput="renderPromptLibrary()">
+        <div class="action-row">
+            <button class="btn btn-secondary" type="button" onclick="renderPromptLibrary(true)">⭐ Favorit Saja</button>
+            <button class="btn btn-secondary" type="button" onclick="clearLibraryFilter()">Tampilkan Semua</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="result-header">
+            <div>
+                <div class="result-title">📖 Koleksi Prompt</div>
+                <div class="help" id="libraryCount">Belum ada prompt tersimpan.</div>
+            </div>
+        </div>
+        <div id="promptLibraryList"></div>
+    </div>
+</section>
+
+
+<section class="page" id="page-safety">
+
+    <div class="card">
+
+        <div class="card-title">
+            🛡️ Copyright & Safety Guard
+        </div>
+
+        <div class="card-desc">
+            Setiap prompt kreatif akan diarahkan menggunakan
+            konsep original dan tidak meminta peniruan persis
+            terhadap karya, karakter, merek atau franchise tertentu.
+        </div>
+
+        <div class="feature-list">
+
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <div class="feature-text">
+                    Gunakan karakter dan desain original.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">©️</div>
+                <div class="feature-text">
+                    Hindari permintaan meniru karya tertentu secara persis.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🚫</div>
+                <div class="feature-text">
+                    Hindari logo, merek dan franchise tertentu bila tidak diperlukan.
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <div class="feature-text">
+                    Prompt diarahkan untuk menghasilkan konsep edukatif yang original.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</div>
+
+
+<section class="page" id="page-settings">
+
+    <div class="hero">
+        <h2>⚙️ Settings</h2>
+        <p>Atur preferensi default GURU AI STUDIO. Pengaturan ini tidak mengubah Universal Context yang sudah tersimpan.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">👤 Profil Pengguna</div>
+        <div class="form-group"><label>Nama Guru</label><input id="settingsTeacherName" type="text" placeholder="Contoh: Zulkifli, S.Pd., Gr."></div>
+        <div class="form-group"><label>Sekolah</label><input id="settingsSchool" type="text" placeholder="Contoh: SMAN 1 Kateman"></div>
+        <div class="form-group"><label>Bahasa Output</label><select id="settingsLanguage"><option>Bahasa Indonesia</option><option>English</option></select></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🏫 Preferensi Pembelajaran</div>
+        <div class="form-group"><label>Default Jenjang</label><select id="settingsLevel"><option>SMP</option><option>SMA</option><option>SMK</option><option>SD</option><option>Umum</option></select></div>
+        <div class="form-group"><label>Default Mata Pelajaran</label><input id="settingsSubject" type="text" placeholder="Contoh: Kimia"></div>
+        <div class="form-group"><label>Gaya Prompt</label><select id="settingsPromptStyle"><option>Ringkas dan langsung</option><option>Terstruktur</option><option>Detail</option><option>Sangat Detail</option></select></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🎨 Preferensi Tampilan</div>
+        <div class="form-group"><label>Mode Tampilan</label><select id="settingsDisplayMode"><option value="standard">Standar</option><option value="compact">Ringkas</option></select></div>
+        <div class="card-desc">Pengaturan tampilan disimpan sebagai preferensi dan tidak mengubah data pembelajaran.</div>
+    </div>
+
+    <div class="card">
+        <div class="action-row">
+            <button class="btn btn-primary" type="button" onclick="saveAppSettings()">💾 Simpan Settings</button>
+            <button class="btn btn-secondary" type="button" onclick="resetAppSettings()">🔄 Pulihkan Default</button>
+        </div>
+        <div id="settingsStatus" class="help" style="margin-top:10px;">Belum ada perubahan.</div>
+    </div>
+
+</section>
+
+
+<section class="page" id="page-about">
+    <div class="hero"><h2>👤 Tentang Perancang</h2><p>Identitas dan filosofi di balik GURU AI STUDIO.</p></div>
+    <div class="card"><div class="card-title">GURU AI STUDIO</div><div class="card-desc"><strong>AI-Powered Learning &amp; Media Creator</strong></div>
+        <div class="card" style="margin-top:16px;background:#F8FBFF;"><div style="font-size:24px;font-weight:800;">Zulkifli, S.Pd., Gr.</div><div style="margin-top:6px;color:#475569;line-height:1.6;">Guru Kimia<br>SMAN 1 Kateman<br>Kabupaten Indragiri Hilir, Riau</div></div>
+    </div>
+    <div class="card"><div class="card-title">💡 Filosofi</div><p style="line-height:1.8;color:#475569;">GURU AI STUDIO dirancang untuk membantu guru mengubah satu gagasan pembelajaran menjadi berbagai bentuk media secara lebih cepat, terstruktur, kreatif, dan bertanggung jawab.</p></div>
+    <div class="card"><div class="card-title">🛠️ Peran Perancang</div><div class="feature-list"><div class="feature"><div class="feature-icon">🧠</div><div class="feature-text">Perancang konsep GURU AI STUDIO.</div></div><div class="feature"><div class="feature-icon">⚙️</div><div class="feature-text">Pengembang sistem dan Prompt Engine.</div></div><div class="feature"><div class="feature-icon">🎨</div><div class="feature-text">Pengembang integrasi berbagai media pembelajaran.</div></div></div></div>
+    <div class="card" style="text-align:center;"><div style="font-size:13px;color:#64748B;">Satu Ide Guru, Beragam Media Pembelajaran.</div><div style="font-size:20px;font-weight:800;margin-top:8px;">Design By : ZP</div></div>
+</section>
+
+</main>
+
+
+
+<!-- =====================================================
+QUICK TEMPLATES — BUILD 12
+===================================================== -->
+<section id="quickTemplatesPanel" class="page-section" style="display:none;">
+    <div class="card" style="margin-bottom:18px;">
+        <div class="eyebrow">QUICK START</div>
+        <h2 style="margin:6px 0;">🎯 Quick Templates</h2>
+        <p style="margin:0;opacity:.78;line-height:1.6;">
+            Pilih template yang paling dekat dengan kebutuhan Anda. Template hanya mengisi ide awal; Anda tetap dapat mengubahnya sebelum Generate.
+        </p>
+    </div>
+
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <div style="font-size:11px;color:#64748B;">⭐ Tandai template yang paling sering Anda gunakan.</div>
+            <button id="favoriteTemplatesToggle" class="btn btn-secondary" type="button" onclick="toggleFavoriteTemplates()">⭐ Hanya Favorit</button>
+        </div>
+        <div id="quickTemplateGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;"></div>
+    </div>
+</section>
+
+<!-- =====================================================
+ONE IDEA → ALL MEDIA — BUILD 5
+===================================================== -->
+<section id="oneIdeaPanel" class="page-section" style="display:none;">
+    <div class="card" style="margin-bottom:18px;">
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+                <div class="eyebrow">ONE IDEA → ALL MEDIA</div>
+                <h2 style="margin:6px 0 6px;">Satu Ide Guru, Beragam Media</h2>
+                <p style="margin:0;opacity:.78;">
+                    Masukkan satu ide pembelajaran. GURU AI STUDIO menyiapkan arahan untuk berbagai media.
+                </p>
+            </div>
+            <div style="font-size:13px;opacity:.7;padding-top:6px;">Design By : ZP</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <label for="oneIdeaInput"><strong>💡 Ide Pembelajaran</strong></label>
+        <textarea id="oneIdeaInput" rows="5"
+            placeholder="Contoh: Mengajarkan reaksi eksoterm dan endoterm menggunakan fenomena hujan untuk siswa kelas X."></textarea>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+            <button class="primary" type="button" onclick="generateOneIdea()">🚀 Buat Semua Media</button>
+            <button type="button" onclick="clearOneIdea()">↺ Bersihkan</button>
+        </div>
+    </div>
+
+    <div id="oneIdeaResult" class="card" style="display:none;margin-top:18px;">
+        <div style="margin-bottom:14px;">
+            <strong>Hasil dari satu ide</strong>
+            <div id="oneIdeaSummary" style="margin-top:6px;opacity:.78;"></div>
+        </div>
+
+        <div id="oneIdeaMediaGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;"></div>
+    </div>
+</section>
+
+<script>
+(function(){
+    const mediaItems = [
+        ["learning","📚","Learning","Materi, LKPD, aktivitas pembelajaran"],
+        ["assessment","📝","Assessment","Soal, asesmen, rubrik"],
+        ["image","🎨","Image","Prompt gambar edukatif"],
+        ["video","🎬","Video / Flow","Prompt video dan storyboard"],
+        ["comic","📖","Comic","Cerita dan panel komik"],
+        ["game","🎮","Game","Konsep game pembelajaran"],
+        ["simulation","🧪","Simulation","Konsep simulasi interaktif"],
+        ["virtualLab","🔬","Virtual Lab","Rancangan laboratorium virtual"],
+        ["narration","🎙️","Narration","Naskah narasi / audio"],
+        ["ppt","🎞️","PPT","Struktur presentasi"]
+    ];
+
+    window.openOneIdeaPanel = function(){
+        document.querySelectorAll(".page").forEach(function(el){
+            el.classList.remove("active");
+        });
+
+        const panel = document.getElementById("oneIdeaPanel");
+        if(panel) panel.style.display = "block";
+
+        const saved = localStorage.getItem("guruAI_currentIdea") || "";
+        const input = document.getElementById("oneIdeaInput");
+        if(input && !input.value.trim() && saved) input.value = saved;
+        window.scrollTo({top:0, behavior:"smooth"});
+    };
+
+    window.generateOneIdea = function(){
+        const input = document.getElementById("oneIdeaInput");
+        const result = document.getElementById("oneIdeaResult");
+        const summary = document.getElementById("oneIdeaSummary");
+        const grid = document.getElementById("oneIdeaMediaGrid");
+        if(!input || !result || !summary || !grid) return;
+
+        const idea = input.value.trim();
+        if(!idea){
+            alert("Tuliskan ide pembelajaran terlebih dahulu.");
+            input.focus();
+            return;
+        }
+
+        localStorage.setItem("guruAI_currentIdea", idea);
+        summary.textContent = idea;
+
+        grid.innerHTML = mediaItems.map(function(item){
+            return `
+                <button type="button"
+                    onclick="useOneIdeaStudio('${item[0]}')"
+                    style="text-align:left;padding:16px;border:1px solid rgba(0,0,0,.10);border-radius:14px;background:var(--card,#fff);cursor:pointer;">
+                    <div style="font-size:24px;margin-bottom:8px;">${item[1]}</div>
+                    <strong>${item[2]}</strong>
+                    <div style="font-size:12px;opacity:.68;margin-top:5px;">${item[3]}</div>
+                </button>
+            `;
+        }).join("");
+
+        result.style.display = "block";
+        if(typeof updateStatus === "function") updateStatus("● One Idea berhasil disiapkan untuk semua media");
+        result.scrollIntoView({behavior:"smooth", block:"start"});
+    };
+
+    window.clearOneIdea = function(){
+        const input = document.getElementById("oneIdeaInput");
+        const result = document.getElementById("oneIdeaResult");
+        if(input) input.value = "";
+        if(result) result.style.display = "none";
+        localStorage.removeItem("guruAI_currentIdea");
+        localStorage.removeItem("guruAI_oneIdeaActive");
+    };
+
+    window.useOneIdeaStudio = function(studio){
+        const idea = (document.getElementById("oneIdeaInput") || {}).value || "";
+        const target = String(studio || "").trim();
+        const allowed = ["learning","assessment","image","video","comic","game","simulation","virtualLab","narration","ppt"];
+
+        if(!allowed.includes(target)){
+            alert("Studio tujuan tidak dikenali. Silakan pilih kartu studio yang tersedia.");
+            return;
+        }
+
+        if(!idea.trim()){
+            alert("Silakan masukkan One Idea terlebih dahulu.");
+            return;
+        }
+
+        /* BUILD 19 ROUTING FIX:
+           One Idea hanya membawa ide. Studio tujuan harus dipasang
+           secara eksplisit sebelum halaman Prompt Studio dirender. */
+        selectedStudio = target;
+        localStorage.setItem("guruAI_currentIdea", idea.trim());
+        localStorage.setItem("guruAI_oneIdeaActive", "true");
+        localStorage.setItem("guruAI_oneIdeaTargetStudio", target);
+
+        document.querySelectorAll(".studio-option").forEach(function(btn){
+            btn.classList.toggle("active", btn.dataset.studio === target);
+        });
+
+        if(typeof openStudio === "function"){
+            openStudio(target);
+        }else{
+            alert("Studio belum siap. Silakan buka ulang GURU AI STUDIO.");
+            return;
+        }
+
+        /* Pastikan field studio target dirender setelah navigasi. */
+        setTimeout(function(){
+            selectedStudio = target;
+            if(typeof renderStudioFields === "function") renderStudioFields();
+        }, 0);
+    };
+})();
+</script>
+
+<script>
+
+/* =====================================================
+PAGE DATA
+===================================================== */
+
+const pageData={
+
+    dashboard:{
+        title:"Dashboard",
+        subtitle:"Prompt Engine — GURU AI STUDIO"
+    },
+
+    idea:{
+        title:"One Idea → All Media",
+        subtitle:"Mulai dari satu ide pembelajaran."
+    },
+
+    templates:{
+        title:"Quick Templates",
+        subtitle:"Mulai cepat dari template pembelajaran."
+    },
+
+    learning:{
+        title:"Prompt Studio",
+        subtitle:"Universal Prompt Engine."
+    },
+
+    assessment:{
+        title:"Assessment Studio",
+        subtitle:"Asesmen, HOTS dan AKM."
+    },
+
+    image:{
+        title:"Image Studio",
+        subtitle:"Prompt gambar edukatif."
+    },
+
+    video:{
+        title:"Video / Flow Studio",
+        subtitle:"Prompt video dan storyboard."
+    },
+
+    comic:{
+        title:"Comic Studio",
+        subtitle:"Prompt komik edukasi."
+    },
+
+    narration:{
+        title:"Audio & Narration",
+        subtitle:"Prompt narasi pembelajaran."
+    },
+
+    game:{
+        title:"Game Studio",
+        subtitle:"Prompt game edukasi."
+    },
+
+    simulation:{
+        title:"Simulation Studio",
+        subtitle:"Prompt simulasi interaktif."
+    },
+
+    "virtual-lab":{
+        title:"Virtual Lab",
+        subtitle:"Prompt laboratorium virtual."
+    },
+
+    optimizer:{
+        title:"Prompt Optimizer",
+        subtitle:"Optimalkan prompt Anda."
+    },
+
+    library:{
+        title:"Prompt Library",
+        subtitle:"Kelola prompt."
+    },
+
+    safety:{
+        title:"Copyright & Safety",
+        subtitle:"Originalitas dan keamanan."
+    },
+
+    settings:{
+        title:"Settings",
+        subtitle:"Preferensi GURU AI STUDIO."
+    },
+
+    about:{
+        title:"Tentang Perancang",
+        subtitle:"Identitas dan filosofi GURU AI STUDIO."
+    },
+
+    context:{
+        title:"Universal Context",
+        subtitle:"Konteks pembelajaran."
+    }
+
+};
+
+
+/* =====================================================
+STATE
+===================================================== */
+
+let selectedStudio="learning";
+let selectedMode="simple";
+let currentContext=null;
+let studioSettings={};
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function navigate(page){
+
+    /* ONE IDEA PANEL: selalu sembunyikan saat pindah ke menu lain */
+    const oneIdeaPanelGlobal=document.getElementById("oneIdeaPanel");
+    if(oneIdeaPanelGlobal){
+        oneIdeaPanelGlobal.style.display="none";
+    }
+
+    /* QUICK TEMPLATES adalah panel khusus, bukan .page */
+    if(page === "templates"){
+        document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+        const panel=document.getElementById("quickTemplatesPanel");
+        if(panel) panel.style.display="block";
+
+        const ideaPanel=document.getElementById("oneIdeaPanel");
+        if(ideaPanel) ideaPanel.style.display="none";
+
+        document.querySelectorAll(".nav button").forEach(btn=>{
+            btn.classList.toggle("active",btn.dataset.page===page);
+        });
+
+        if(pageData[page]){
+            document.getElementById("pageTitle").textContent=pageData[page].title;
+            document.getElementById("pageSubtitle").textContent=pageData[page].subtitle;
+        }
+
+        renderQuickTemplates();
+        closeSidebar();
+        window.scrollTo({top:0,behavior:"smooth"});
+        return;
+    }
+
+    /* QUICK TEMPLATES: panel khusus, selalu disembunyikan
+       ketika pengguna berpindah ke menu apa pun selain Quick Templates. */
+    const quickTemplatesPanelGlobal=document.getElementById("quickTemplatesPanel");
+    if(quickTemplatesPanelGlobal){
+        quickTemplatesPanelGlobal.style.display="none";
+    }
+
+    /* ONE IDEA → ALL MEDIA adalah panel khusus, bukan .page */
+    if(page === "idea"){
+        document
+            .querySelectorAll(".page")
+            .forEach(p=>p.classList.remove("active"));
+
+        const panel=document.getElementById("oneIdeaPanel");
+        if(panel){
+            panel.style.display="block";
+        }
+
+        document
+            .querySelectorAll(".nav button")
+            .forEach(btn=>{
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.page === page
+                );
+            });
+
+        if(pageData[page]){
+            document.getElementById("pageTitle").textContent=
+                pageData[page].title;
+            document.getElementById("pageSubtitle").textContent=
+                pageData[page].subtitle;
+        }
+
+        if(typeof openOneIdeaPanel === "function"){
+            openOneIdeaPanel();
+        }
+
+        closeSidebar();
+        window.scrollTo({top:0,behavior:"smooth"});
+        return;
+    }
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>p.classList.remove("active"));
+
+    const target=
+        document.getElementById("page-"+page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(btn=>{
+            btn.classList.toggle(
+                "active",
+                btn.dataset.page===page
+            );
+        });
+
+    if(pageData[page]){
+
+        document.getElementById("pageTitle").textContent=
+            pageData[page].title;
+
+        document.getElementById("pageSubtitle").textContent=
+            pageData[page].subtitle;
+
+    }
+
+    if(page==="learning"){
+        refreshContextSummary();
+        loadStudioSettings();
+        renderStudioFields();
+        renderApproachChoices();
+        updateSTEMStatus();
+    }
+
+    if(page==="library"){
+        renderPromptLibrary();
+    }
+
+    if(page==="settings"){
+        loadAppSettings();
+    }
+
+    if(page==="optimizer"){
+        selectedStudio="optimizer";
+        loadStudioSettings();
+        renderStudioFields();
+    }
+
+    closeSidebar();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    document
+        .getElementById("overlay")
+        .classList.toggle("show");
+
+}
+
+function closeSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+    document
+        .getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =====================================================
+LOAD CONTEXT
+===================================================== */
+
+function loadContext(){
+
+    const saved=
+        localStorage.getItem("guruAI_context");
+
+    if(!saved){
+
+        currentContext=null;
+
+        return null;
+
+    }
+
+    try{
+
+        currentContext=JSON.parse(saved);
+
+        return currentContext;
+
+    }catch(error){
+
+        console.error(error);
+
+        currentContext=null;
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+CONTEXT SUMMARY
+===================================================== */
+
+function refreshContextSummary(){
+
+    const container=
+        document.getElementById("contextSummary");
+
+    if(!container) return;
+
+    const ctx=loadContext();
+
+    if(!ctx){
+
+        container.innerHTML=`
+
+            <div class="context-item">
+                <small>Status</small>
+                <strong>Belum ada konteks</strong>
+            </div>
+
+            <div class="context-item">
+                <small>Langkah</small>
+                <strong>Isi Universal Context terlebih dahulu</strong>
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    const items=[
+
+        ["Jenjang",ctx.jenjang],
+        ["Fase",ctx.fase],
+        ["Kelas",ctx.kelas],
+        ["Mata Pelajaran",ctx.mapel],
+        ["Materi",ctx.materi],
+        ["Submateri",ctx.submateri],
+        ["Kurikulum",ctx.kurikulum],
+        ["Alokasi",ctx.alokasi]
+
+    ];
+
+    container.innerHTML=
+        items.map(item=>`
+
+            <div class="context-item">
+
+                <small>${escapeHTML(item[0])}</small>
+
+                <strong>
+                    ${escapeHTML(item[1]||"—")}
+                </strong>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =====================================================
+IDE
+===================================================== */
+
+function useIdea(){
+
+    const idea=
+        document
+        .getElementById("ideaInput")
+        .value
+        .trim();
+
+    if(!idea){
+
+        alert("Tuliskan ide pembelajaran terlebih dahulu.");
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "guruAI_currentIdea",
+        idea
+    );
+
+    /*
+      Kita tidak menimpa seluruh context.
+      Ide hanya disimpan sebagai ide awal.
+    */
+
+    alert(
+        "Ide berhasil disimpan.\n\n" +
+        "Silakan gunakan Universal Context untuk melengkapi data."
+    );
+
+    navigate("learning");
+
+}
+
+
+/* =====================================================
+STEM QUICK INTEGRATION — BUILD 5.1
+===================================================== */
+
+const approachChoices=[
+    "TPACK",
+    "STEM",
+    "STEAM",
+    "Diferensiasi",
+    "Kontekstual",
+    "Literasi",
+    "Numerasi"
+];
+
+function renderApproachChoices(){
+    const list=document.getElementById("approachChoiceList");
+    const status=document.getElementById("approachChoiceStatus");
+    if(!list) return;
+
+    const ctx=loadContext()||{};
+    const approaches=Array.isArray(ctx.approach) ? ctx.approach : [];
+
+    list.innerHTML=approachChoices.map(name=>{
+        const active=approaches.includes(name);
+        return `<button type="button" class="btn ${active ? "btn-success" : "btn-secondary"}"
+            style="font-size:10px;padding:7px 10px;"
+            onclick="toggleApproach('${name}')">${active ? "✓ " : ""}${name}</button>`;
+    }).join("");
+
+    if(status){
+        status.textContent=approaches.length
+            ? "Aktif: " + approaches.join(", ")
+            : "Belum ada pendekatan yang dipilih.";
+    }
+}
+
+function toggleApproach(name){
+    const ctx=loadContext();
+    if(!ctx){
+        alert("Universal Context belum tersedia. Isi konteks terlebih dahulu.");
+        return;
+    }
+
+    if(!Array.isArray(ctx.approach)){
+        ctx.approach=[];
+    }
+
+    const index=ctx.approach.indexOf(name);
+    if(index===-1){
+        ctx.approach.push(name);
+    }else{
+        ctx.approach.splice(index,1);
+    }
+
+    localStorage.setItem("guruAI_context",JSON.stringify(ctx));
+    currentContext=ctx;
+    refreshContextSummary();
+    renderApproachChoices();
+    updateSTEMStatus();
+    updateStatus("● Pendekatan pembelajaran diperbarui");
+}
+
+
+function updateSTEMStatus(){
+
+    const ctx=loadContext()||{};
+    const approaches=Array.isArray(ctx.approach) ? ctx.approach : [];
+    const active=approaches.includes("STEM");
+
+    const button=document.getElementById("stemToggleButton");
+    const status=document.getElementById("stemStatus");
+
+    if(button){
+        button.classList.toggle("btn-success",active);
+        button.classList.toggle("btn-secondary",!active);
+        button.textContent=active ? "✓ STEM Aktif" : "🔬 STEM";
+    }
+
+    if(status){
+        status.textContent=active ? "STEM sudah masuk Universal Context" : "Belum dipilih";
+    }
+}
+
+function toggleSTEM(){
+
+    const ctx=loadContext();
+
+    if(!ctx){
+        alert("Universal Context belum tersedia. Isi konteks terlebih dahulu.");
+        return;
+    }
+
+    if(!Array.isArray(ctx.approach)){
+        ctx.approach=[];
+    }
+
+    const index=ctx.approach.indexOf("STEM");
+
+    if(index===-1){
+        ctx.approach.push("STEM");
+        updateStatus("● Pendekatan STEM ditambahkan ke Universal Context");
+    }else{
+        ctx.approach.splice(index,1);
+        updateStatus("● Pendekatan STEM dihapus dari Universal Context");
+    }
+
+    localStorage.setItem("guruAI_context",JSON.stringify(ctx));
+    currentContext=ctx;
+    refreshContextSummary();
+    updateSTEMStatus();
+}
+
+
+/* =====================================================
+SMART STUDIO FIELDS — BUILD 4
+===================================================== */
+
+const studioFieldConfig={
+
+    learning:[
+        ["outputType","Jenis output","select","Modul Ajar|LKPD|Bahan Ajar|Aktivitas Pembelajaran|Paket Lengkap"],
+        ["activityFocus","Fokus aktivitas","text","Contoh: eksperimen sederhana, diskusi, problem solving"],
+        ["studentActivity","Aktivitas peserta didik","textarea","Apa yang dilakukan siswa?"],
+        ["differentiationDetail","Diferensiasi tambahan","textarea","Dukungan untuk siswa yang membutuhkan bantuan atau tantangan."]
+    ],
+
+    assessment:[
+        ["questionCount","Jumlah soal","number","10"],
+        ["questionForm","Bentuk soal","select","Pilihan Ganda|Pilihan Ganda Kompleks|Benar-Salah|Menjodohkan|Isian Singkat|Uraian|Campuran"],
+        ["cognitiveFocus","Fokus kognitif","select","C1|C2|C3|C4|C5|C6|Campuran"],
+        ["stimulus","Stimulus","textarea","Data, tabel, grafik, fenomena atau kasus."],
+        ["answerKey","Kunci & pembahasan","select","Ya|Tidak"],
+        ["rubric","Rubrik","select","Ya|Tidak"]
+    ],
+
+    image:[
+        ["visualType","Jenis visual","select","Ilustrasi edukasi|Infografis|Diagram|Poster|Eksperimen|Karakter|Fotorealistik|3D|Isometrik"],
+        ["style","Gaya visual","choice","3D Edukatif|Ilustrasi Modern|Fotorealistik|Cartoon Edukatif|Minimalis|Isometrik|Cinematic|Flat Illustration|Sketsa"],
+        ["composition","Komposisi","choice","Clean & Centered|Infografis Terstruktur|Simetris|Rule of Thirds|Close-up|Wide Shot|Split Screen|Poster Vertikal"],
+        ["camera","Kamera / perspektif","choice","Eye Level|Top View|Low Angle|High Angle|Close-up|Macro|Wide Angle|Isometric View"],
+        ["lighting","Pencahayaan","choice","Natural Soft Light|Studio Bright|Cinematic|Dramatic|Golden Hour|Bright & Clean|Soft Diffused"],
+        ["ratio","Rasio","select","16:9|4:5|1:1|9:16|3:2"],
+        ["imageText","Teks dalam gambar","textarea","Teks yang harus tampil jika diperlukan."]
+    ],
+
+    video:[
+        ["duration","Durasi","select","10 detik|15 detik|30 detik|45 detik|60 detik|90 detik|2–3 menit"],
+        ["sceneCount","Jumlah scene","number","5"],
+        ["storyboard","Storyboard","select","Ya, per scene|Tidak, satu prompt"],
+        ["videoType","Jenis Video","choice","Pembelajaran|Eksperimen|Demonstrasi|Storytelling|Reels Edukasi|Dokumenter|Penjelasan Konsep"],
+        ["style","Gaya visual","choice","Realistis Edukatif|Cinematic|3D Edukatif|Animasi Modern|Dokumenter|Fotorealistik|Minimalis|Futuristik"],
+        ["character","Karakter","textarea","Karakter original dan konsistensi penampilan."],
+        ["location","Lokasi","text","Contoh: laboratorium, kelas, lingkungan pesisir"],
+        ["action","Aksi utama","textarea","Gerakan atau proses yang harus terlihat."],
+        ["cameraShot","Jenis shot","choice","Wide Shot|Medium Shot|Close-up|Macro|Over the Shoulder|Top View|Eye Level"],
+        ["cameraMotion","Gerakan kamera","choice","Static|Pan|Tilt|Zoom In|Zoom Out|Dolly In|Dolly Out|Tracking|Orbit"],
+        ["lighting","Pencahayaan","choice","Natural Soft Light|Studio Bright|Bright & Clean|Cinematic|Dramatic|Golden Hour|Soft Diffused"],
+        ["audio","Audio","choice","Narasi|Musik|Ambience|Efek Suara|Narasi + Musik|Narasi + Ambience|Tanpa Musik"],
+        ["dialog","Dialog / narasi","textarea","Dialog atau narasi jika diperlukan."]
+    ],
+
+    comic:[
+        ["characterBible","Character Bible","textarea","Nama, usia, peran, penampilan, pakaian, kepribadian, atribut."],
+        ["panelCount","Jumlah panel","select","4 panel|6 panel|8 panel|10 panel|12 panel"],
+        ["genre","Genre","choice","Komedi Edukasi|Petualangan|Misteri|Slice of Life|Drama Ringan|Eksperimen"],
+        ["visualStyle","Gaya visual","choice","Cartoon Edukatif|2D Modern|3D Cartoon|Semi Realistic|Minimalis"],
+        ["characterStyle","Gaya karakter","choice","Siswa|Guru|Ilmuwan|Karakter Fantasi Edukatif|Custom"],
+        ["format","Format komik","choice","4 Panel|6 Panel|8 Panel|10 Panel|Storyboard"],
+        ["arc","Alur cerita","textarea","Pembukaan → masalah → eksplorasi → penyelesaian → refleksi."],
+        ["consistency","Konsistensi karakter","select","Sangat ketat|Ketat|Standar"],
+        ["dialogStyle","Gaya dialog","choice","Natural|Lucu|Singkat|Interaktif|Storytelling"],
+        ["narration","Narasi panel","select","Ya|Tidak"]
+    ],
+
+    game:[
+        ["gameType","Jenis Game","choice","Quiz|Matching|Drag & Drop|Memory|Puzzle|Card Game|Adventure|Simulation Game"],
+        ["gameStyle","Gaya Game","choice","Fun & Colorful|Minimalis|Modern|Gamifikasi Kelas|Story-Based"],
+        ["mechanicType","Mekanisme Permainan","choice","Pilih Jawaban|Seret & Lepas|Cocokkan|Susun|Tebak|Pecahkan Masalah"],
+        ["difficulty","Tingkat Kesulitan","choice","Mudah|Sedang|Sulit|Bertahap"],
+        ["levels","Jumlah Level","number","3"],
+        ["scoring","Sistem Skor","text","Contoh: +10 benar, -5 salah"],
+        ["lives","Nyawa / Kesempatan","number","3"],
+        ["reward","Reward","choice","Poin|Bintang|Badge|Level|Leaderboard"],
+        ["feedback","Feedback","textarea","Feedback setelah jawaban atau aksi."],
+        ["questionCount","Jumlah Tantangan","number","10"],
+        ["timer","Timer","select","Tidak ada|30 detik|60 detik|90 detik|Custom"]
+    ],
+
+    simulation:[
+        ["variables","Variabel","textarea","Variabel yang dapat diubah siswa."],
+        ["controls","Kontrol","textarea","Slider, tombol, input angka, dropdown."],
+        ["inputs","Input","textarea","Data atau parameter yang dimasukkan."],
+        ["outputs","Output","textarea","Hasil yang ditampilkan."],
+        ["graph","Grafik","select","Tidak perlu|Bar|Line|Scatter|Dinamika real-time"],
+        ["animation","Animasi","select","Tidak perlu|Sederhana|Interaktif|Real-time"],
+        ["data","Data pengamatan","textarea","Data yang diamati, dicatat, atau dibandingkan."],
+        ["reset","Reset","select","Wajib|Opsional"]
+    ],
+
+    virtualLab:[
+        ["labMode","Mode praktikum","select","Demonstrasi|Eksplorasi|Praktikum Individu|Guided Inquiry"],
+        ["tools","Alat","textarea","Daftar alat laboratorium."],
+        ["materials","Bahan","textarea","Daftar bahan."],
+        ["safety","Keselamatan","textarea","APD, bahaya, larangan, prosedur keselamatan."],
+        ["procedure","Prosedur","textarea","Langkah kerja yang disimulasikan."],
+        ["data","Data pengamatan","textarea","Tabel atau data yang dikumpulkan."],
+        ["calculations","Perhitungan","textarea","Rumus/perhitungan jika relevan."],
+        ["analysis","Analisis","textarea","Pertanyaan analisis siswa."]
+    ],
+
+    narration:[
+        ["duration","Durasi","select","30 detik|60 detik|90 detik|2 menit|3 menit|5 menit"],
+        ["tone","Tone suara","select","Ramah|Inspiratif|Tenang|Enerjik|Storytelling|Formal"],
+        ["hook","Opening / Hook","textarea","Kalimat pembuka yang menarik."],
+        ["structure","Struktur narasi","textarea","Urutan konsep yang dijelaskan."],
+        ["example","Contoh kontekstual","textarea","Contoh kehidupan nyata."],
+        ["reflection","Pertanyaan reflektif","textarea","Pertanyaan untuk berpikir."],
+        ["closing","Closing","textarea","Pesan penutup/rangkuman."]
+    ],
+
+    ppt:[
+        ["purpose","Tujuan Presentasi","choice","Mengajar Materi|Seminar|Workshop|Presentasi Proyek|Asesmen"],
+        ["slideCount","Jumlah Slide","select","5 slide|7 slide|10 slide|12 slide|15 slide"],
+        ["presentationStyle","Gaya Presentasi","choice","Edukatif Modern|Minimalis|Storytelling|Infografis|Interaktif|Apple Keynote Style"],
+        ["structure","Struktur Presentasi","choice","Masalah → Konsep → Contoh → Aktivitas → Refleksi|Hook → Materi → Demonstrasi → Kesimpulan|Materi → Contoh → Latihan → Refleksi|Bebas"],
+        ["visual","Gaya Visual","choice","Foto|Ilustrasi|Diagram|Infografis|Grafik|Campuran"],
+        ["studentActivity","Aktivitas Peserta Didik","choice","Tidak ada|Pertanyaan Pemantik|Diskusi|Kuis|Refleksi|Diskusi + Refleksi"],
+        ["speakerNotes","Catatan Pembicara","select","Ya|Tidak"],
+        ["slideDetails","Detail Tambahan","textarea","Warna, font, elemen visual, kebutuhan khusus, atau arahan desain lainnya."]
+    ]
+,
+
+    optimizer:[
+        ["optimizationType","Jenis Optimasi","choice","Perjelas Instruksi|Tambahkan Konteks|Strukturkan Prompt|Buat Lebih Spesifik|Optimasi untuk AI|Lengkapkan Prompt"],
+        ["promptPurpose","Tujuan Prompt","choice","Pembelajaran|Membuat Soal|Membuat PPT|Membuat Gambar|Membuat Video|Membuat LKPD|Membuat Modul|Umum"],
+        ["detailLevel","Tingkat Detail","choice","Ringkas|Sedang|Detail|Sangat Detail"],
+        ["outputStyle","Gaya Output","choice","Natural|Profesional|Edukatif|Kreatif|Terstruktur"],
+        ["outputFormat","Format Output","choice","Teks|Tabel|Langkah-Langkah|Template|JSON|Bebas"],
+        ["targetAI","Target AI","choice","ChatGPT|Gemini|Claude|AI Image|AI Video|AI Umum"],
+        ["rawPrompt","Prompt Mentah","textarea","Tempel prompt yang ingin diperbaiki di sini."],
+        ["optimizerNote","Instruksi Tambahan","textarea","Misalnya: buat lebih cocok untuk siswa SMA."]
+    ]
+
+};
+
+const APP_SETTINGS_KEY="guruAI_appSettings";
+
+const DEFAULT_APP_SETTINGS={
+    teacherName:"",
+    school:"",
+    language:"Bahasa Indonesia",
+    level:"SMA",
+    subject:"Kimia",
+    promptStyle:"Ringkas dan langsung",
+    displayMode:"standard"
+};
+
+function getAppSettings(){
+    try{
+        const saved=JSON.parse(localStorage.getItem(APP_SETTINGS_KEY)||"null");
+        return Object.assign({},DEFAULT_APP_SETTINGS,saved||{});
+    }catch(e){
+        return Object.assign({},DEFAULT_APP_SETTINGS);
+    }
+}
+
+function loadAppSettings(){
+    const s=getAppSettings();
+    const map={
+        settingsTeacherName:s.teacherName,
+        settingsSchool:s.school,
+        settingsLanguage:s.language,
+        settingsLevel:s.level,
+        settingsSubject:s.subject,
+        settingsPromptStyle:s.promptStyle,
+        settingsDisplayMode:s.displayMode
+    };
+    Object.keys(map).forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.value=map[id];
+    });
+    const status=document.getElementById("settingsStatus");
+    if(status) status.textContent="Pengaturan tersimpan dapat digunakan sebagai preferensi default.";
+}
+
+function saveAppSettings(){
+    const value={
+        teacherName:document.getElementById("settingsTeacherName")?.value.trim()||"",
+        school:document.getElementById("settingsSchool")?.value.trim()||"",
+        language:document.getElementById("settingsLanguage")?.value||DEFAULT_APP_SETTINGS.language,
+        level:document.getElementById("settingsLevel")?.value||DEFAULT_APP_SETTINGS.level,
+        subject:document.getElementById("settingsSubject")?.value.trim()||"",
+        promptStyle:document.getElementById("settingsPromptStyle")?.value||DEFAULT_APP_SETTINGS.promptStyle,
+        displayMode:document.getElementById("settingsDisplayMode")?.value||DEFAULT_APP_SETTINGS.displayMode
+    };
+    localStorage.setItem(APP_SETTINGS_KEY,JSON.stringify(value));
+    applyDisplayPreference(value.displayMode);
+    const status=document.getElementById("settingsStatus");
+    if(status) status.textContent="✓ Settings berhasil disimpan.";
+    if(typeof updateStatus==="function") updateStatus("● Settings berhasil disimpan");
+}
+
+function resetAppSettings(){
+    localStorage.removeItem(APP_SETTINGS_KEY);
+    loadAppSettings();
+    applyDisplayPreference(DEFAULT_APP_SETTINGS.displayMode);
+    const status=document.getElementById("settingsStatus");
+    if(status) status.textContent="✓ Pengaturan dikembalikan ke default.";
+}
+
+function applyDisplayPreference(mode){
+    document.body.classList.toggle("settings-compact",mode==="compact");
+}
+
+function initAppSettings(){
+    const s=getAppSettings();
+    applyDisplayPreference(s.displayMode);
+}
+
+function loadStudioSettings(){
+
+    const saved=localStorage.getItem("guruAI_studioSettings");
+
+    if(!saved){
+        studioSettings={};
+        return;
+    }
+
+    try{
+        studioSettings=JSON.parse(saved)||{};
+    }catch(error){
+        console.error(error);
+        studioSettings={};
+    }
+
+}
+
+function saveCurrentStudioFields(){
+
+    const fields=studioFieldConfig[selectedStudio]||[];
+    const data={};
+
+    fields.forEach(field=>{
+        const el=document.getElementById("studioField_"+field[0]);
+        if(el) data[field[0]]=el.value.trim();
+    });
+
+    studioSettings[selectedStudio]=data;
+
+    localStorage.setItem(
+        "guruAI_studioSettings",
+        JSON.stringify(studioSettings)
+    );
+
+}
+
+function chooseStudioOption(fieldId,value){
+
+    const el=document.getElementById("studioField_"+fieldId);
+
+    if(!el) return;
+
+    el.value=value;
+
+    saveCurrentStudioFields();
+    renderStudioFields();
+
+}
+
+function renderStudioFields(){
+
+    const container=document.getElementById(
+        selectedStudio==="optimizer" ? "optimizerSmartStudioFields" : "smartStudioFields"
+    );
+    const badge=document.getElementById("smartStudioBadge");
+
+    if(!container) return;
+
+    const fields=studioFieldConfig[selectedStudio]||[];
+
+    const labelMap={
+        learning:"Learning",
+        assessment:"Assessment",
+        image:"Image",
+        video:"Video / Flow",
+        comic:"Comic",
+        game:"Game",
+        simulation:"Simulation",
+        virtualLab:"Virtual Lab",
+        narration:"Narration",
+        ppt:"PPT",
+        optimizer:"Prompt Optimizer"
+    };
+
+    if(badge){
+        badge.textContent="⚙️ "+(labelMap[selectedStudio]||selectedStudio);
+    }
+
+    const saved=studioSettings[selectedStudio]||{};
+
+    container.innerHTML=`
+        <div class="smart-fields-grid">
+            ${fields.map(field=>{
+
+                const id=field[0];
+                const label=field[1];
+                const type=field[2];
+                const placeholder=field[3]||"";
+                const value=saved[id]||"";
+
+                if(type==="select"){
+
+                    return `
+                        <div class="smart-field">
+                            <label>${escapeHTML(label)}</label>
+                            <select
+                                id="studioField_${id}"
+                                onchange="saveCurrentStudioFields()">
+
+                                <option value="">Pilih ${escapeHTML(label)}</option>
+
+                                ${placeholder.split("|").map(option=>`
+                                    <option value="${escapeHTML(option)}"
+                                        ${value===option?"selected":""}>
+                                        ${escapeHTML(option)}
+                                    </option>
+                                `).join("")}
+
+                            </select>
+                        </div>
+                    `;
+
+                }
+
+                if(type==="choice"){
+
+                    const options=placeholder.split("|");
+
+                    return `
+                        <div class="smart-field choice-field">
+                            <label>${escapeHTML(label)}</label>
+                            <div class="choice-help">Klik pilihan yang paling sesuai. Tidak perlu mengetahui istilah teknis.</div>
+                            <div class="choice-options">
+                                ${options.map(option=>`
+                                    <button
+                                        type="button"
+                                        class="choice-option ${value===option?"active":""}"
+                                        onclick="chooseStudioOption('${id}', '${escapeHTML(option).replace(/'/g,"\\'")}')"
+                                    >${escapeHTML(option)}</button>
+                                `).join("")}
+                            </div>
+                            <div class="choice-custom">
+                                <input
+                                    id="studioField_${id}"
+                                    type="text"
+                                    value="${escapeHTML(value)}"
+                                    placeholder="Atau tulis pilihan sendiri..."
+                                    oninput="saveCurrentStudioFields(); renderStudioFields()"
+                                >
+                            </div>
+                        </div>
+                    `;
+
+                }
+
+                if(type==="number"){
+
+                    return `
+                        <div class="smart-field">
+                            <label>${escapeHTML(label)}</label>
+                            <input
+                                id="studioField_${id}"
+                                type="number"
+                                min="1"
+                                value="${escapeHTML(value)}"
+                                placeholder="${escapeHTML(placeholder)}"
+                                oninput="saveCurrentStudioFields()">
+                        </div>
+                    `;
+
+                }
+
+                const full=type==="textarea";
+
+                return `
+                    <div class="smart-field ${full?"full":""}">
+                        <label>${escapeHTML(label)}</label>
+                        <textarea
+                            id="studioField_${id}"
+                            placeholder="${escapeHTML(placeholder)}"
+                            oninput="saveCurrentStudioFields()"
+                        >${escapeHTML(value)}</textarea>
+                    </div>
+                `;
+
+            }).join("")}
+        </div>
+    `;
+
+}
+
+function studioSettingsBlock(){
+
+    const fields=studioFieldConfig[selectedStudio]||[];
+    const settings=studioSettings[selectedStudio]||{};
+    const lines=[];
+
+    fields.forEach(field=>{
+
+        const value=settings[field[0]];
+
+        if(value!==undefined && value!==null &&
+           String(value).trim()!==""){
+
+            lines.push("- "+field[1]+": "+value);
+
+        }
+
+    });
+
+    if(!lines.length) return "";
+
+    return `
+SPESIFIKASI KHUSUS STUDIO:
+${lines.join("\n")}
+`;
+}
+
+
+/* =====================================================
+SELECT STUDIO
+===================================================== */
+
+function selectStudio(studio){
+
+    selectedStudio=studio;
+
+    document
+        .querySelectorAll(".studio-option")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.studio===studio
+            );
+
+        });
+
+    renderStudioFields();
+
+}
+
+
+/* =====================================================
+SELECT MODE
+===================================================== */
+
+function selectMode(mode){
+
+    selectedMode=mode;
+
+    document
+        .querySelectorAll(".mode")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.mode===mode
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+OPEN STUDIO
+===================================================== */
+
+function openStudio(studio){
+
+    selectedStudio=studio;
+
+    document
+        .querySelectorAll(".studio-option")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.studio===studio
+            );
+
+        });
+
+    if(studio==="optimizer"){
+        navigate("optimizer");
+    }else{
+        navigate("learning");
+
+        /* ONE IDEA ROUTING:
+           Studio tetap memakai Prompt Engine yang sama,
+           tetapi kartu tujuan harus menjadi menu yang aktif.
+           Hanya studio yang sebelumnya tidak berpindah secara visual
+           yang diperbaiki di sini. */
+        const oneIdeaVisualTargets=[
+            "comic",
+            "game",
+            "simulation",
+            "virtualLab",
+            "narration",
+            "ppt"
+        ];
+
+        if(oneIdeaVisualTargets.includes(studio)){
+            document.querySelectorAll(".nav button").forEach(function(btn){
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.page===studio
+                );
+            });
+        }
+    }
+
+}
+
+
+/* =====================================================
+BUILD CONTEXT TEXT
+===================================================== */
+
+function contextLines(ctx){
+
+    const lines=[];
+
+    addLine(
+        lines,
+        "Jenjang",
+        ctx.jenjang
+    );
+
+    addLine(
+        lines,
+        "Fase",
+        ctx.fase
+    );
+
+    addLine(
+        lines,
+        "Kelas",
+        ctx.kelas
+    );
+
+    addLine(
+        lines,
+        "Mata pelajaran",
+        ctx.mapel
+    );
+
+    addLine(
+        lines,
+        "Materi",
+        ctx.materi
+    );
+
+    addLine(
+        lines,
+        "Submateri",
+        ctx.submateri
+    );
+
+    addLine(
+        lines,
+        "Konteks kehidupan nyata",
+        ctx.konteks
+    );
+
+    addLine(
+        lines,
+        "Alokasi waktu",
+        ctx.alokasi
+    );
+
+    addLine(
+        lines,
+        "Kurikulum",
+        ctx.kurikulum
+    );
+
+    addLine(
+        lines,
+        "CP",
+        ctx.cp
+    );
+
+    addLine(
+        lines,
+        "TP",
+        ctx.tp
+    );
+
+    addLine(
+        lines,
+        "ATP",
+        ctx.atp
+    );
+
+    return lines.join("\n");
+
+}
+
+
+/* =====================================================
+ADD LINE
+===================================================== */
+
+function addLine(arr,label,value){
+
+    if(
+        value!==undefined &&
+        value!==null &&
+        String(value).trim()!==""
+    ){
+
+        arr.push(
+            `- ${label}: ${value}`
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+PEDAGOGY BLOCK
+===================================================== */
+
+function pedagogyBlock(ctx){
+
+    const blocks=[];
+
+    if(ctx.model && ctx.model.length){
+
+        blocks.push(
+            "Model pembelajaran yang digunakan: "+
+            ctx.model.join(", ")+"."
+        );
+
+    }
+
+    if(ctx.approach && ctx.approach.length){
+
+        blocks.push(
+            "Pendekatan pembelajaran: "+
+            ctx.approach.join(", ")+"."
+        );
+
+        if(ctx.approach.includes("STEM")){
+
+            blocks.push(
+                "Integrasikan STEM secara autentik sesuai kebutuhan materi dengan menghubungkan Science (sains), Technology (teknologi), Engineering (rekayasa/desain), dan Mathematics (matematika). " +
+                "Tidak semua unsur harus dipaksakan muncul; pilih dan hubungkan unsur yang benar-benar mendukung tujuan pembelajaran, aktivitas pemecahan masalah, produk atau solusi, serta konteks kehidupan nyata."
+            );
+
+        }
+
+    }
+
+    if(ctx.deepLearning){
+
+        blocks.push(
+            "Integrasikan Pembelajaran Mendalam dengan "+
+            "pengalaman Memahami, Mengaplikasikan, dan Merefleksikan."
+        );
+
+        if(
+            ctx.deepPrinciple &&
+            ctx.deepPrinciple.length
+        ){
+
+            blocks.push(
+                "Prinsip Pembelajaran Mendalam yang ditekankan: "+
+                ctx.deepPrinciple.join(", ")+"."
+            );
+
+        }
+
+    }
+
+    if(ctx.differentiation){
+
+        let text=
+            "Gunakan pembelajaran berdiferensiasi";
+
+        if(
+            ctx.diffType &&
+            ctx.diffType.length
+        ){
+
+            text+=
+                " dengan fokus pada "+
+                ctx.diffType.join(", ");
+
+        }
+
+        text+=".";
+
+        blocks.push(text);
+
+    }
+
+    return blocks.join("\n");
+
+}
+
+
+/* =====================================================
+LITERACY BLOCK
+===================================================== */
+
+function literacyBlock(ctx){
+
+    if(!ctx.literacy){
+        return "";
+    }
+
+    let text=
+        "Integrasikan literasi secara alami dan relevan "+
+        "dengan materi, bukan sekadar aktivitas tambahan.";
+
+    if(
+        ctx.literacyType &&
+        ctx.literacyType.length
+    ){
+
+        text+=
+            "\nJenis literasi yang dapat digunakan: "+
+            ctx.literacyType.join(", ")+".";
+
+    }
+
+    text+=
+        "\nAktivitas literasi dapat mencakup menemukan informasi, "+
+        "memahami, menafsirkan, menganalisis, mengevaluasi, "+
+        "menyimpulkan, dan mengomunikasikan informasi sesuai kebutuhan.";
+
+    return text;
+
+}
+
+
+/* =====================================================
+NUMERACY BLOCK
+===================================================== */
+
+function numeracyBlock(ctx){
+
+    if(!ctx.numeracy){
+        return "";
+    }
+
+    let text=
+        "Integrasikan numerasi secara kontekstual jika relevan "+
+        "dengan materi.";
+
+    if(
+        ctx.numeracyActivity &&
+        ctx.numeracyActivity.length
+    ){
+
+        text+=
+            "\nAktivitas numerasi yang dapat digunakan: "+
+            ctx.numeracyActivity.join(", ")+".";
+
+    }
+
+    text+=
+        "\nGunakan angka, data, tabel, grafik, pengukuran, "+
+        "perbandingan atau estimasi hanya jika benar-benar "+
+        "mendukung tujuan pembelajaran.";
+
+    return text;
+
+}
+
+
+/* =====================================================
+IKAN BLOCK
+===================================================== */
+
+function ikanBlock(ctx){
+
+    if(!ctx.ikan){
+        return "";
+    }
+
+    let text=
+        "Integrasikan IKAN (Integrasi Kurikulum Anti Narkoba) "+
+        "secara edukatif, preventif, kontekstual, dan proporsional.";
+
+    if(ctx.ikanLevel){
+        text+=
+            "\nLevel integrasi: "+
+            ctx.ikanLevel+".";
+    }
+
+    if(ctx.ikanContext){
+        text+=
+            "\nKonteks: "+
+            ctx.ikanContext+".";
+    }
+
+    text+=
+        "\nJangan memberikan instruksi penggunaan, produksi, "+
+        "perolehan, atau penyalahgunaan zat terlarang. "+
+        "Hindari glorifikasi dan sensasionalisasi.";
+
+    return text;
+
+}
+
+
+/* =====================================================
+ASSESSMENT BLOCK
+===================================================== */
+
+function assessmentBlock(ctx){
+
+    if(!ctx.assessment){
+        return "";
+    }
+
+    let text=
+        "Pengaturan asesmen:";
+
+    if(ctx.assessmentType){
+        text+=
+            "\n- Jenis: "+
+            ctx.assessmentType;
+    }
+
+    if(ctx.cognitiveLevel){
+        text+=
+            "\n- Level kognitif: "+
+            ctx.cognitiveLevel;
+    }
+
+    if(ctx.assessmentOrientation){
+        text+=
+            "\n- Orientasi: "+
+            ctx.assessmentOrientation;
+    }
+
+    text+=
+        "\nPastikan asesmen selaras dengan tujuan pembelajaran.";
+
+    return text;
+
+}
+
+
+/* =====================================================
+SAFETY BLOCK
+===================================================== */
+
+function safetyBlock(){
+
+    return `
+ATURAN ORIGINALITAS DAN KEAMANAN:
+- Gunakan karakter, desain, lokasi, ilustrasi dan konsep original.
+- Jangan menyalin karya berhak cipta secara persis.
+- Jangan meminta peniruan persis terhadap karakter, franchise,
+  ilustrator, seniman, film, game atau karya tertentu.
+- Hindari penggunaan logo atau merek tertentu jika tidak diperlukan.
+- Jika pengguna memberikan referensi karya tertentu, ubah menjadi
+  deskripsi karakteristik umum dan hasilkan konsep original.
+- Jangan mengklaim hasil sebagai "100% bebas hak cipta".
+- Utamakan tujuan pendidikan, keselamatan, akurasi dan kesesuaian usia.
+`;
+
+}
+
+
+/* =====================================================
+MODE INSTRUCTION
+===================================================== */
+
+function modeInstruction(mode){
+
+    if(mode==="simple"){
+
+        return `
+MODE PROMPT: SIMPLE
+Buat prompt yang ringkas, jelas dan langsung dapat digunakan.
+Hindari instruksi yang tidak diperlukan.
+`;
+
+    }
+
+    if(mode==="professional"){
+
+        return `
+MODE PROMPT: PROFESSIONAL
+Susun prompt secara terstruktur dengan peran AI, konteks,
+tujuan, target peserta didik, instruksi, output yang diharapkan,
+gaya bahasa dan batasan.
+`;
+
+    }
+
+    return `
+MODE PROMPT: EXPERT
+Susun prompt secara sangat terstruktur dan presisi.
+Gunakan role, context, target, objective, pedagogy, task,
+output specification, quality criteria, constraints dan safety.
+Gunakan "minimum necessary prompt": jangan menambahkan
+instruksi yang tidak relevan.
+`;
+
+}
+
+
+/* =====================================================
+COMMON HEADER
+===================================================== */
+
+function commonPrompt(ctx){
+
+    return `
+Anda adalah seorang ahli pendidikan dan perancang pembelajaran
+yang membantu guru menghasilkan materi pembelajaran berkualitas.
+
+KONTEKS PEMBELAJARAN:
+${contextLines(ctx)}
+
+${ctx.tujuan?
+"TUJUAN PEMBELAJARAN:\n"+ctx.tujuan+"\n":""
+}
+
+${pedagogyBlock(ctx)}
+
+${literacyBlock(ctx)}
+
+${numeracyBlock(ctx)}
+
+${ikanBlock(ctx)}
+
+${assessmentBlock(ctx)}
+
+${studioSettingsBlock()}
+`;
+
+}
+
+
+/* =====================================================
+LEARNING PROMPT
+===================================================== */
+
+function learningPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+TUGAS:
+Rancang pembelajaran untuk materi tersebut.
+
+Susun hasil yang:
+1. Selaras dengan tujuan pembelajaran.
+2. Sesuai karakteristik peserta didik.
+3. Kontekstual dengan kehidupan nyata.
+4. Menggunakan model pembelajaran yang telah dipilih.
+5. Mendorong aktivitas berpikir, eksplorasi dan komunikasi.
+6. Jika relevan, integrasikan literasi dan numerasi.
+7. Jika Pembelajaran Mendalam aktif, gunakan pengalaman
+   Memahami → Mengaplikasikan → Merefleksikan.
+8. Jika diferensiasi aktif, berikan dukungan sesuai kebutuhan siswa.
+
+OUTPUT:
+Buat:
+- tujuan pembelajaran
+- pertanyaan pemantik
+- kegiatan pendahuluan
+- kegiatan inti
+- kegiatan penutup
+- aktivitas peserta didik
+- media dan sumber belajar
+- asesmen
+- refleksi
+- tindak lanjut
+
+Gunakan Bahasa Indonesia yang natural dan mudah dipahami guru.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+ASSESSMENT PROMPT
+===================================================== */
+
+function assessmentPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+TUGAS:
+Buat asesmen pembelajaran yang selaras dengan materi,
+tujuan pembelajaran dan karakteristik peserta didik.
+
+${ctx.assessment?
+"Gunakan pengaturan asesmen yang telah ditentukan."
+:"Jika pengaturan asesmen belum ditentukan, pilih bentuk yang paling relevan."}
+
+Jika orientasi HOTS digunakan:
+- gunakan stimulus yang bermakna
+- berikan konteks
+- minta analisis atau penalaran
+- hindari soal yang hanya menguji hafalan
+- pastikan jawaban dapat dipertanggungjawabkan
+
+OUTPUT:
+Buat:
+- petunjuk
+- soal
+- pilihan jawaban jika bentuknya pilihan ganda
+- kunci jawaban
+- pembahasan
+- indikator
+- level kognitif
+- rubrik jika diperlukan
+
+Jangan membuat fakta atau data ilmiah yang tidak dapat dipertanggungjawabkan.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+IMAGE PROMPT
+===================================================== */
+
+function imagePrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah art director untuk visual pembelajaran edukatif.
+
+TUGAS:
+Buat prompt gambar edukatif yang membantu peserta didik
+memahami materi.
+
+SPESIFIKASI:
+- Subjek utama harus jelas.
+- Hubungkan visual dengan materi pembelajaran.
+- Gunakan konteks kehidupan nyata jika relevan.
+- Gunakan karakter dan desain original.
+- Tentukan komposisi.
+- Tentukan perspektif kamera.
+- Tentukan pencahayaan.
+- Tentukan lingkungan.
+- Tentukan detail visual yang relevan.
+- Jika terdapat teks dalam gambar, gunakan teks Bahasa Indonesia
+  yang singkat dan benar.
+- Jangan memenuhi gambar dengan teks yang tidak diperlukan.
+
+OUTPUT:
+Berikan satu prompt gambar siap copy.
+
+Format:
+[SUBJEK]
+[KONTEKS]
+[KOMPOSISI]
+[STYLE]
+[LIGHTING]
+[CAMERA]
+[EDUCATIONAL PURPOSE]
+[ORIGINALITY & SAFETY]
+
+Rasio gambar: 16:9 kecuali ada kebutuhan lain.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+VIDEO PROMPT
+===================================================== */
+
+function videoPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah sutradara video pendidikan.
+
+TUGAS:
+Buat prompt video edukatif yang menjelaskan materi
+secara visual dan mudah dipahami peserta didik.
+
+Tentukan:
+- konsep video
+- target peserta didik
+- tujuan pembelajaran
+- durasi
+- gaya visual
+- lokasi
+- karakter original
+- aksi
+- gerakan kamera
+- komposisi
+- pencahayaan
+- audio
+- dialog atau narasi
+- transisi
+- konsep ilmiah yang harus ditampilkan secara akurat
+
+Jika storyboard diperlukan, susun adegan:
+SCENE 01
+SCENE 02
+SCENE 03
+dan seterusnya.
+
+Setiap scene harus memiliki:
+- visual
+- aksi
+- kamera
+- audio
+- dialog/narasi
+- tujuan pembelajaran
+
+Gunakan Bahasa Indonesia.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+COMIC PROMPT
+===================================================== */
+
+function comicPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah penulis dan character designer komik edukasi.
+
+TUGAS:
+Buat konsep komik pembelajaran original.
+
+Buat CHARACTER BIBLE:
+- nama
+- usia
+- peran
+- penampilan
+- pakaian
+- kepribadian
+- atribut visual
+
+Kemudian buat alur:
+1. Pembukaan
+2. Masalah atau konflik
+3. Eksplorasi
+4. Penyelesaian
+5. Refleksi
+
+Buat panel secara konsisten.
+
+Setiap panel memuat:
+- lokasi
+- karakter
+- ekspresi
+- aksi
+- komposisi
+- dialog
+- narasi
+- konsep pembelajaran
+
+Jaga konsistensi karakter dari panel awal hingga akhir.
+
+Gunakan karakter dan desain original.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+GAME PROMPT
+===================================================== */
+
+function gamePrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah game designer pendidikan.
+
+TUGAS:
+Rancang game edukasi berdasarkan materi tersebut.
+
+Tentukan:
+- nama game original
+- tujuan pembelajaran
+- target pemain
+- mekanik permainan
+- aturan
+- level kesulitan
+- sistem skor
+- feedback
+- reward
+- kondisi menang/kalah
+- variasi soal
+- cara memastikan game tetap memiliki nilai edukatif
+
+Jika diminta membuat game HTML:
+gunakan HTML, CSS dan JavaScript.
+Utamakan:
+- single file
+- responsive
+- dapat berjalan offline
+- tidak membutuhkan backend
+- tombol reset
+- feedback jawaban
+- skor
+- tampilan ramah siswa
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+SIMULATION PROMPT
+===================================================== */
+
+function simulationPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah instructional designer dan developer simulasi
+pembelajaran interaktif.
+
+TUGAS:
+Rancang simulasi interaktif untuk membantu siswa memahami
+materi melalui eksplorasi.
+
+Tentukan:
+- tujuan simulasi
+- variabel
+- kontrol
+- input
+- output
+- perubahan parameter
+- visualisasi
+- grafik jika relevan
+- data yang dapat diamati
+- pertanyaan investigasi
+- feedback
+
+Jika dibuat sebagai HTML:
+gunakan HTML, CSS dan JavaScript.
+Buat single-file HTML yang:
+- responsive
+- dapat berjalan offline
+- memiliki kontrol interaktif
+- memiliki tombol reset
+- memberikan feedback
+- mudah digunakan siswa
+- tidak membutuhkan backend atau API
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+VIRTUAL LAB PROMPT
+===================================================== */
+
+function virtualLabPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah perancang laboratorium virtual pendidikan.
+
+TUGAS:
+Rancang praktikum virtual berdasarkan materi.
+
+Buat:
+1. tujuan praktikum
+2. pertanyaan pemantik
+3. alat dan bahan
+4. keselamatan kerja
+5. prosedur
+6. interaksi siswa
+7. variabel
+8. data pengamatan
+9. perhitungan jika diperlukan
+10. analisis
+11. kesimpulan
+12. refleksi
+
+Jika dibuat sebagai HTML:
+- single file
+- responsive
+- dapat berjalan offline
+- simulasi interaktif
+- input data siswa
+- tabel pengamatan
+- perhitungan otomatis jika relevan
+- feedback
+- reset
+- tidak membutuhkan backend/API
+
+Pastikan prosedur aman dan sesuai konteks pendidikan.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+PROMPT OPTIMIZER
+===================================================== */
+
+function optimizerPrompt(ctx,extra){
+
+    const settings=studioSettings.optimizer||{};
+    const raw=settings.rawPrompt||document.getElementById("optimizerInput")?.value?.trim()||"";
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah prompt engineer pendidikan.
+
+TUGAS:
+Optimalkan prompt mentah berikut tanpa mengubah maksud utama pengguna.
+Pertahankan tujuan asli dan tambahkan kejelasan hanya jika diperlukan.
+
+PROMPT MENTAH:
+${raw || "[Prompt belum diisi]"}
+
+PENGATURAN OPTIMASI:
+- Jenis Optimasi: ${settings.optimizationType||"Perjelas Instruksi"}
+- Tujuan Prompt: ${settings.promptPurpose||"Umum"}
+- Tingkat Detail: ${settings.detailLevel||"Sedang"}
+- Gaya Output: ${settings.outputStyle||"Natural"}
+- Format Output: ${settings.outputFormat||"Teks"}
+- Target AI: ${settings.targetAI||"AI Umum"}
+${settings.optimizerNote?"- Instruksi Tambahan: "+settings.optimizerNote:""}
+
+ATURAN OPTIMASI:
+1. Jangan mengubah maksud utama prompt.
+2. Jangan menambahkan tujuan baru yang tidak diminta.
+3. Perjelas konteks, target, tugas, dan format output jika memang diperlukan.
+4. Gunakan Bahasa Indonesia yang natural dan instruksi yang langsung dapat digunakan.
+5. Gunakan prinsip minimum necessary prompt.
+6. Pertahankan keamanan, originalitas, dan kesesuaian usia.
+
+OUTPUT:
+Berikan satu prompt final yang telah dioptimalkan.
+Jangan memberikan penjelasan panjang di luar prompt final.
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+
+${extra?"INSTRUKSI TAMBAHAN:\n"+extra:""}
+`;
+
+}
+
+
+/* =====================================================
+PPT PROMPT
+===================================================== */
+
+function pptPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah perancang presentasi pembelajaran untuk guru.
+
+TUGAS:
+Buat rancangan presentasi pembelajaran yang terstruktur, jelas, menarik,
+dan sesuai usia peserta didik berdasarkan Universal Context dan spesifikasi PPT.
+
+Pastikan setiap slide memiliki tujuan yang jelas dan tidak terlalu padat teks.
+Gunakan visual yang membantu pemahaman konsep, bukan sekadar dekorasi.
+Jika relevan, integrasikan literasi, numerasi, Pembelajaran Mendalam,
+diferensiasi, aktivitas peserta didik, dan asesmen yang telah ditentukan.
+
+OUTPUT:
+Susun untuk setiap slide:
+- nomor dan judul slide
+- tujuan/fungsi slide
+- isi utama
+- visual yang disarankan
+- aktivitas atau pertanyaan jika diperlukan
+- catatan pembicara jika diaktifkan
+
+Gunakan Bahasa Indonesia yang natural, ringkas, dan siap dikembangkan
+menjadi PowerPoint atau aplikasi presentasi lainnya.
+
+Jangan memenuhi slide dengan paragraf panjang. Utamakan hierarki informasi,
+contoh kontekstual, keterbacaan, dan desain original.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+NARRATION PROMPT
+===================================================== */
+
+function narrationPrompt(ctx,extra){
+
+    return `
+${commonPrompt(ctx)}
+
+PERAN:
+Anda adalah penulis naskah narasi pendidikan.
+
+TUGAS:
+Buat naskah narasi Bahasa Indonesia yang natural,
+jelas dan sesuai usia peserta didik.
+
+Tentukan:
+- opening/hook
+- penjelasan konsep
+- contoh kontekstual
+- pertanyaan reflektif
+- rangkuman
+- closing
+
+Gunakan bahasa yang komunikatif.
+Hindari istilah teknis tanpa penjelasan.
+
+Jika durasi belum ditentukan, buat narasi yang cukup
+untuk sekitar 2–3 menit.
+
+${extra?
+"INSTRUKSI TAMBAHAN:\n"+extra
+:""}
+
+${modeInstruction(selectedMode)}
+
+${safetyBlock()}
+`;
+
+}
+
+
+/* =====================================================
+PROMPT ENGINE MAP
+===================================================== */
+
+const promptEngines={
+
+    learning:learningPrompt,
+    assessment:assessmentPrompt,
+    image:imagePrompt,
+    video:videoPrompt,
+    comic:comicPrompt,
+    game:gamePrompt,
+    simulation:simulationPrompt,
+    virtualLab:virtualLabPrompt,
+    narration:narrationPrompt,
+    ppt:pptPrompt,
+    optimizer:optimizerPrompt
+
+};
+
+
+/* =====================================================
+STUDIO LABEL
+===================================================== */
+
+const studioLabels={
+
+    learning:"📚 Learning",
+    assessment:"📝 Assessment",
+    image:"🎨 Image",
+    video:"🎬 Video / Flow",
+    comic:"📖 Comic",
+    game:"🎮 Game",
+    simulation:"🧪 Simulation",
+    virtualLab:"🔬 Virtual Lab",
+    narration:"🎙️ Narration",
+    ppt:"🎞️ PPT",
+    optimizer:"✨ Prompt Optimizer"
+
+};
+
+
+/* =====================================================
+GENERATE PROMPT
+===================================================== */
+
+function generatePrompt(){
+
+    const baseCtx=loadContext();
+
+    if(!baseCtx){
+
+        alert(
+            "Belum ada Universal Context.\n\n"+
+            "Silakan isi dan simpan konteks pembelajaran terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+    if(
+        !baseCtx.jenjang ||
+        !baseCtx.mapel ||
+        !baseCtx.materi
+    ){
+
+        alert(
+            "Konteks belum lengkap.\n\n"+
+            "Minimal isi:\n"+
+            "• Jenjang\n"+
+            "• Mata Pelajaran\n"+
+            "• Materi"
+        );
+
+        return;
+
+    }
+
+    saveCurrentStudioFields();
+
+    const ctx={...baseCtx};
+    const oneIdeaActive=localStorage.getItem("guruAI_oneIdeaActive")==="true";
+    const oneIdea=(localStorage.getItem("guruAI_currentIdea") || "").trim();
+
+    const extraBase=
+        document
+        .getElementById("extraInstruction")
+        .value
+        .trim();
+
+    /* BUILD 19 FIX: One Idea bersifat tambahan, bukan pengganti Universal Context. */
+    const oneIdeaExtra = oneIdeaActive && oneIdea
+        ? "IDE TAMBAHAN DARI ONE IDEA:\n" + oneIdea
+        : "";
+
+    const extra=[extraBase, oneIdeaExtra]
+        .filter(Boolean)
+        .join("\n\n")
+        .trim();
+
+    const engine=
+        promptEngines[selectedStudio];
+
+    if(!engine){
+
+        alert("Prompt Engine tidak ditemukan.");
+
+        return;
+
+    }
+
+    const prompt=
+        engine(
+            ctx,
+            extra
+        )
+        .replace(/\n{4,}/g,"\n\n")
+        .trim();
+
+    document
+        .getElementById("promptOutput")
+        .value=prompt;
+
+    /* BUILD 10.6: simpan baseline prompt hasil Generate.
+       Setiap sesi Smart Enhancer selalu dimulai dari baseline ini,
+       bukan dari hasil enhancer yang pernah diterapkan sebelumnya. */
+    localStorage.setItem("guruAI_smartEnhancerBaseline",prompt);
+    localStorage.setItem("guruAI_smartEnhancerOriginalPrompt",prompt);
+    savePromptHistory("Generate Prompt",prompt);
+
+    updatePromptActionCenter();
+
+    /* BUILD 7.5 — Guard membaca instruksi/ide pengguna, bukan template prompt engine. */
+    if(typeof copyrightGuard === "function"){
+        const oneIdeaActive = localStorage.getItem("guruAI_oneIdeaActive") === "true";
+        const currentIdea = (localStorage.getItem("guruAI_currentIdea") || "").trim();
+        const guardInput = oneIdeaActive && currentIdea ? currentIdea : extra;
+        copyrightGuard(guardInput, prompt);
+    }
+
+    if(typeof checkPromptQuality === "function") checkPromptQuality(prompt);
+
+    document
+        .getElementById("promptResult")
+        .classList.add("show");
+
+    document
+        .getElementById("resultStudio")
+        .textContent=
+            studioLabels[selectedStudio] ||
+            selectedStudio;
+
+    document
+        .getElementById("resultMode")
+        .textContent=
+            selectedMode.charAt(0).toUpperCase()+
+            selectedMode.slice(1);
+
+    updateStatus(
+        "● Prompt berhasil dibuat"
+    );
+
+    document
+        .getElementById("promptResult")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+}
+
+
+/* =====================================================
+COPY PROMPT
+===================================================== */
+
+/* =====================================================
+BUILD 11 — PROMPT HISTORY
+===================================================== */
+
+function getPromptHistory(){
+    try{
+        const data=JSON.parse(localStorage.getItem("guruAI_promptHistory") || "[]");
+        return Array.isArray(data) ? data : [];
+    }catch(error){
+        return [];
+    }
+}
+
+function savePromptHistory(label,promptText){
+    const text=String(promptText || "").trim();
+    if(!text)return;
+
+    let items=getPromptHistory();
+    const firstLine=text.split("\n").find(function(line){return line.trim();}) || "Prompt";
+    const title=String(label || firstLine).trim().slice(0,70);
+
+    items.unshift({
+        id:"h_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+        title:title,
+        studio:studioLabels[selectedStudio] || selectedStudio,
+        prompt:text,
+        createdAt:new Date().toISOString()
+    });
+
+    /* Maksimal 10 versi agar LocalStorage tetap ringan. */
+    items=items.slice(0,10);
+    localStorage.setItem("guruAI_promptHistory",JSON.stringify(items));
+}
+
+function togglePromptHistory(){
+    const panel=document.getElementById("promptHistoryPanel");
+    if(!panel)return;
+    const opening=panel.style.display==="none" || !panel.style.display;
+    panel.style.display=opening ? "block" : "none";
+    if(opening)renderPromptHistory();
+}
+
+function renderPromptHistory(){
+    const list=document.getElementById("promptHistoryList");
+    if(!list)return;
+    const items=getPromptHistory();
+    if(!items.length){
+        list.innerHTML='<div style="padding:14px;border:1px dashed #CBD5E1;border-radius:10px;color:#64748B;font-size:11px;">Belum ada riwayat prompt.</div>';
+        return;
+    }
+
+    list.innerHTML=items.map(function(item,index){
+        const date=new Date(item.createdAt);
+        const when=isNaN(date.getTime()) ? "" : date.toLocaleString("id-ID");
+        const safeTitle=String(item.title || "Prompt").replace(/[&<>"']/g,function(ch){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]);});
+        const safeStudio=String(item.studio || "").replace(/[&<>"']/g,function(ch){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]);});
+        return '<div style="padding:11px;border:1px solid #E2E8F0;border-radius:10px;margin-bottom:8px;background:#F8FAFC;">'+
+            '<div style="font-weight:700;font-size:11px;">'+(index+1)+'. '+safeTitle+'</div>'+
+            '<div style="font-size:9px;color:#64748B;margin-top:3px;">'+safeStudio+(when ? ' • '+when : '')+'</div>'+
+            '<div style="font-size:10px;color:#475569;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+String(item.prompt || "").replace(/[&<>"']/g,function(ch){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]);})+'</div>'+
+            '<div class="action-row" style="margin-top:8px;">'+
+            '<button class="btn btn-secondary" type="button" onclick="restorePromptHistory('+index+')">↩️ Pulihkan</button>'+
+            '</div>'+
+            '</div>';
+    }).join("");
+}
+
+function restorePromptHistory(index){
+    const items=getPromptHistory();
+    const item=items[index];
+    const output=document.getElementById("promptOutput");
+    if(!item || !output)return;
+    output.value=item.prompt;
+    updatePromptActionCenter();
+    if(typeof checkPromptQuality === "function")checkPromptQuality(item.prompt);
+    if(typeof runPromptQualityCheck === "function")runPromptQualityCheck();
+    if(typeof runCopyrightGuard === "function")runCopyrightGuard();
+    updateStatus("● Versi prompt dipulihkan dari Riwayat");
+    const panel=document.getElementById("promptHistoryPanel");
+    if(panel)panel.style.display="none";
+}
+
+function clearPromptHistory(){
+    if(!getPromptHistory().length){
+        alert("Riwayat prompt masih kosong.");
+        return;
+    }
+    if(!confirm("Hapus seluruh riwayat prompt?"))return;
+    localStorage.removeItem("guruAI_promptHistory");
+    renderPromptHistory();
+    updateStatus("● Riwayat prompt dihapus");
+}
+
+function togglePromptPreview(){
+    const output=document.getElementById("promptOutput"), box=document.getElementById("promptPreviewBox");
+    if(!output||!box)return;
+    if(box.style.display==="none"||!box.style.display){box.textContent=output.value.trim()||"Belum ada prompt.";box.style.display="block";}else{box.style.display="none";}
+}
+
+function updatePromptActionCenter(){
+    const output=document.getElementById("promptOutput"), summary=document.getElementById("promptActionSummary"), status=document.getElementById("promptActionStatus"), box=document.getElementById("promptPreviewBox");
+    if(!output||!summary||!status)return;
+    const text=output.value.trim(), words=text?text.split(/\s+/).filter(Boolean).length:0;
+    summary.textContent=text?("Prompt siap digunakan • "+words+" kata • dapat diedit sebelum disalin."):"Prompt siap digunakan setelah Generate Prompt.";
+    status.textContent=text?"✓ Siap digunakan":"Belum ada prompt";
+    status.style.background=text?"#DCFCE7":"#E2E8F0"; status.style.color=text?"#166534":"#475569";
+    if(box&&box.style.display!=="none")box.textContent=text||"Belum ada prompt.";
+}
+
+const smartEnhancementOptions={
+    clarify:{label:"🎯 Perjelas",text:"Gunakan instruksi yang jelas, spesifik, tidak ambigu, dan langsung pada tugas utama."},
+    complete:{label:"🧩 Lengkapi",text:"Lengkapi konteks, tujuan, kriteria keberhasilan, dan bentuk output yang diperlukan tanpa menambahkan informasi yang tidak relevan."},
+    student:{label:"🎓 Sesuaikan dengan siswa",text:"Sesuaikan bahasa, contoh, tingkat kesulitan, aktivitas, dan hasil akhir dengan karakteristik serta kesiapan peserta didik yang ditentukan dalam konteks."},
+    hots:{label:"🔥 Naikkan HOTS",text:"Jika sesuai dengan tujuan pembelajaran, tambahkan aktivitas analisis, evaluasi, pemecahan masalah, pengambilan keputusan, atau penciptaan; jangan memaksakan HOTS jika tidak relevan."},
+    deep:{label:"🧠 Pembelajaran Mendalam",text:"Jika Pembelajaran Mendalam aktif, susun pengalaman belajar melalui Memahami → Mengaplikasikan → Merefleksikan secara bermakna dan kontekstual."},
+    stem:{label:"🔬 Tambahkan STEM",text:"Jika STEM relevan, hubungkan Science, Technology, Engineering, dan Mathematics secara autentik sesuai tujuan; tidak semua unsur harus dipaksakan."},
+    visual:{label:"🎨 Perkuat visual",text:"Perjelas kebutuhan visual, struktur tampilan, contoh visual, dan konsistensi desain hanya jika jenis output membutuhkan unsur visual."},
+    video:{label:"🎬 Optimalkan AI Video",text:"Untuk output video, tambahkan arahan durasi, scene, aksi, shot kamera, gerakan kamera, pencahayaan, audio, dan konsistensi karakter bila relevan."},
+    image:{label:"🖼️ Optimalkan AI Image",text:"Untuk output gambar, tambahkan arahan subjek, komposisi, perspektif, pencahayaan, gaya visual, rasio, dan elemen teks bila relevan."}
+};
+let smartEnhancerSelected=[];
+let smartEnhancerBasePrompt="";
+
+function cleanEnhancerArtifacts(text){
+    let value=String(text||"");
+
+    /* Hapus seluruh instruksi penguatan yang pernah ditempelkan.
+       Tujuan: setiap pilihan baru selalu bekerja dari prompt asli hasil Generate. */
+    const exactArtifacts=[
+        "Perjelas tugas dengan menetapkan tindakan yang harus dilakukan, urutan pekerjaan yang logis, informasi yang perlu digunakan, serta hasil yang harus dihasilkan. Pastikan setiap instruksi langsung mendukung tujuan utama dan dapat dilaksanakan tanpa menebak maksud pengguna.",
+        "Perjelas tugas dengan instruksi yang jelas, spesifik, tidak ambigu, dan langsung pada tugas utama. Hindari instruksi yang tidak diperlukan.",
+        "Lengkapi tugas hanya pada bagian yang belum tersedia atau masih ambigu. Periksa konteks, tujuan, langkah kerja, kriteria keberhasilan, dan bentuk output; pertahankan bagian yang sudah lengkap, jangan mengulang informasi, dan jangan menambahkan tujuan baru atau informasi yang tidak relevan.",
+        "Sesuaikan bahasa, contoh, tingkat kesulitan, aktivitas, dan dukungan dengan karakteristik, kesiapan belajar, serta minat peserta didik yang tercantum dalam konteks.",
+        "Jika selaras dengan tujuan pembelajaran, dorong aktivitas analisis, evaluasi, pemecahan masalah, pengambilan keputusan, atau penciptaan. Jangan memaksakan HOTS jika tidak relevan.",
+        "Jika Pembelajaran Mendalam aktif, susun pengalaman belajar melalui Memahami → Mengaplikasikan → Merefleksikan secara bermakna dan kontekstual.",
+        "Jika STEM relevan, hubungkan Science, Technology, Engineering, dan Mathematics secara autentik sesuai tujuan pembelajaran. Tidak semua unsur harus dipaksakan.",
+        "Jika output membutuhkan unsur visual, perjelas subjek, komposisi, perspektif, pencahayaan, gaya visual, dan elemen visual yang benar-benar diperlukan.",
+        "Jika output berupa video, jelaskan durasi, pembagian scene, aksi, shot kamera, gerakan kamera, pencahayaan, audio, dan konsistensi karakter sesuai kebutuhan.",
+        "Jika output berupa gambar, jelaskan subjek, komposisi, perspektif, pencahayaan, gaya visual, rasio, dan teks dalam gambar hanya jika diperlukan."
+    ];
+    exactArtifacts.forEach(function(item){
+        value=value.split(item).join("");
+    });
+
+    /* Bersihkan blok penguatan versi lama jika pernah tersimpan. */
+    value=value.replace(/\n?\n?PENGUATAN PROMPT TERPILIH:[\s\S]*?(?=\n\n(?:OUTPUT:|MODE PROMPT:|ATURAN ORIGINALITAS|$))/gi,"");
+    value=value.replace(/\n{3,}/g,"\n\n").trim();
+    return value;
+}
+
+
+function openSmartEnhancer(){
+    const output=document.getElementById("promptOutput");
+    const savedOriginal=localStorage.getItem("guruAI_smartEnhancerOriginalPrompt") || "";
+    const savedBaseline=localStorage.getItem("guruAI_smartEnhancerBaseline") || "";
+    const source=savedOriginal.trim() || savedBaseline.trim() || (output ? output.value.trim() : "");
+    smartEnhancerBasePrompt=cleanEnhancerArtifacts(source);
+    localStorage.setItem("guruAI_smartEnhancerBaseline",smartEnhancerBasePrompt);
+    const panel=document.getElementById("smartEnhancerPanel");
+    const choices=document.getElementById("smartEnhancerChoices");
+    if(!output||!output.value.trim()){alert("Belum ada prompt untuk dioptimalkan. Silakan Generate Prompt terlebih dahulu.");return;}
+    if(!panel||!choices)return;
+    smartEnhancerSelected=[];
+    choices.innerHTML=Object.keys(smartEnhancementOptions).map(function(key){
+        const item=smartEnhancementOptions[key];
+        return '<button type="button" class="btn btn-secondary smart-enhancer-choice" data-key="'+key+'" onclick="toggleSmartEnhancement(\''+key+'\')">'+item.label+'</button>';
+    }).join("");
+    panel.style.display="block";
+}
+
+function toggleSmartEnhancement(key){
+    const index=smartEnhancerSelected.indexOf(key);
+    if(index===-1)smartEnhancerSelected.push(key);else smartEnhancerSelected.splice(index,1);
+    document.querySelectorAll(".smart-enhancer-choice").forEach(function(btn){
+        const active=smartEnhancerSelected.includes(btn.dataset.key);
+        btn.classList.toggle("btn-success",active);
+        btn.classList.toggle("btn-secondary",!active);
+    });
+}
+
+function buildSmartEnhancedPrompt(){
+    const output=document.getElementById("promptOutput");
+    const base=smartEnhancerBasePrompt || (output?output.value.trim():"");
+    if(!base)return "";
+    if(!smartEnhancerSelected.length)return base;
+
+    let result=base;
+
+    const inserts={
+        clarify:"\n\nPerjelas tugas dengan menetapkan tindakan yang harus dilakukan, urutan pekerjaan yang logis, informasi yang perlu digunakan, serta hasil yang harus dihasilkan. Pastikan setiap instruksi langsung mendukung tujuan utama dan dapat dilaksanakan tanpa menebak maksud pengguna.",
+        complete:"\n\nLengkapi tugas hanya pada bagian yang belum tersedia atau masih ambigu. Periksa konteks, tujuan, langkah kerja, kriteria keberhasilan, dan bentuk output; pertahankan bagian yang sudah lengkap, jangan mengulang informasi, dan jangan menambahkan tujuan baru atau informasi yang tidak relevan.",
+        student:"\n\nSesuaikan bahasa, contoh, tingkat kesulitan, aktivitas, dan dukungan dengan karakteristik, kesiapan belajar, serta minat peserta didik yang tercantum dalam konteks.",
+        hots:"\n\nJika selaras dengan tujuan pembelajaran, dorong aktivitas analisis, evaluasi, pemecahan masalah, pengambilan keputusan, atau penciptaan. Jangan memaksakan HOTS jika tidak relevan.",
+        deep:"\n\nJika Pembelajaran Mendalam aktif, susun pengalaman belajar melalui Memahami → Mengaplikasikan → Merefleksikan secara bermakna dan kontekstual.",
+        stem:"\n\nJika STEM relevan, hubungkan Science, Technology, Engineering, dan Mathematics secara autentik sesuai tujuan pembelajaran. Tidak semua unsur harus dipaksakan.",
+        visual:"\n\nJika output membutuhkan unsur visual, perjelas subjek, komposisi, perspektif, pencahayaan, gaya visual, dan elemen visual yang benar-benar diperlukan.",
+        video:"\n\nJika output berupa video, jelaskan durasi, pembagian scene, aksi, shot kamera, gerakan kamera, pencahayaan, audio, dan konsistensi karakter sesuai kebutuhan.",
+        image:"\n\nJika output berupa gambar, jelaskan subjek, komposisi, perspektif, pencahayaan, gaya visual, rasio, dan teks dalam gambar hanya jika diperlukan."
+    };
+
+    function insertAfterHeading(text, heading, addition){
+        const index=text.indexOf(heading);
+        if(index===-1)return text;
+        const start=index+heading.length;
+        return text.slice(0,start)+addition+text.slice(start);
+    }
+
+    smartEnhancerSelected.forEach(function(key){
+        const addition=inserts[key]||"";
+        if(!addition)return;
+
+        if(key==="clarify" || key==="complete" || key==="hots") {
+            result=insertAfterHeading(result,"TUGAS:",addition);
+        }else if(key==="student") {
+            result=insertAfterHeading(result,"KONTEKS PEMBELAJARAN:",addition);
+        }else if(key==="deep" || key==="stem") {
+            result=insertAfterHeading(result,"Pendekatan pembelajaran:",addition);
+        }else if(key==="visual" || key==="video" || key==="image") {
+            result=insertAfterHeading(result,"OUTPUT:",addition);
+        }
+    });
+
+    return result;
+}
+
+function previewSmartEnhancement(){
+    const preview=document.getElementById("smartEnhancerPreview");
+    if(!preview)return;
+    if(!smartEnhancerSelected.length){alert("Pilih minimal satu penguatan terlebih dahulu.");return;}
+    preview.textContent=buildSmartEnhancedPrompt();
+    preview.style.display="block";
+}
+
+function applySmartEnhancement(){
+    const output=document.getElementById("promptOutput");
+    if(!output)return;
+    if(!smartEnhancerSelected.length){alert("Pilih minimal satu penguatan terlebih dahulu.");return;}
+    output.value=buildSmartEnhancedPrompt();
+    savePromptHistory("Smart Enhancer • "+smartEnhancerSelected.map(function(key){return smartEnhancementOptions[key].label;}).join(" + "),output.value);
+    updatePromptActionCenter();
+    if(typeof runPromptQualityCheck==='function')runPromptQualityCheck();
+    if(typeof runCopyrightGuard==='function')runCopyrightGuard();
+    closeSmartEnhancer();
+    updateStatus("● Smart Prompt Enhancer diterapkan");
+}
+
+function closeSmartEnhancer(){
+    const panel=document.getElementById("smartEnhancerPanel");
+    if(panel)panel.style.display="none";
+    smartEnhancerSelected=[];
+    smartEnhancerBasePrompt="";
+}
+
+/* BUILD 10.6: jika prompt diedit manual, guru dapat menjadikannya
+   baseline baru dengan Generate Prompt atau dengan Edit lalu Generate.
+   Enhancer tidak pernah menulis hasil enhancement kembali ke baseline. */
+
+function optimizeCurrentPrompt(){
+    const output=document.getElementById("promptOutput"), input=document.getElementById("studioField_rawPrompt");
+    if(!output||!output.value.trim()){alert("Belum ada prompt untuk dioptimalkan. Silakan Generate Prompt terlebih dahulu.");return;}
+    if(!input){alert("Prompt Optimizer belum siap. Silakan buka menu Prompt Optimizer terlebih dahulu.");return;}
+    input.value=output.value.trim(); saveCurrentStudioFields(); navigate("optimizer");
+    setTimeout(function(){const el=document.getElementById("studioField_rawPrompt");if(el)el.value=output.value.trim();},100);
+}
+
+function copyPrompt(){
+
+    copyText("promptOutput");
+
+}
+
+
+/* =====================================================
+COPY TEXT
+===================================================== */
+
+async function copyText(id){
+
+    const element=
+        document.getElementById(id);
+
+    if(!element) return;
+
+    const text=element.value;
+
+    try{
+
+        await navigator.clipboard.writeText(text);
+
+        updateStatus(
+            "● Prompt berhasil disalin"
+        );
+
+        alert("Prompt berhasil disalin.");
+
+    }catch(error){
+
+        element.select();
+
+        document.execCommand("copy");
+
+        alert("Prompt berhasil disalin.");
+
+    }
+
+}
+
+
+/* =====================================================
+EDIT
+===================================================== */
+
+function editPrompt(){
+
+    const output=
+        document.getElementById("promptOutput");
+
+    output.focus();
+
+    output.setSelectionRange(
+        output.value.length,
+        output.value.length
+    );
+
+}
+
+
+/* =====================================================
+CLEAR EXTRA
+===================================================== */
+
+function clearExtra(){
+
+    document
+        .getElementById("extraInstruction")
+        .value="";
+
+}
+
+
+/* =====================================================
+OPTIMIZER
+===================================================== */
+
+function optimizePrompt(){
+
+    const inputElement=document.getElementById("studioField_rawPrompt");
+    const outputElement=document.getElementById("optimizerOutput");
+    const resultElement=document.getElementById("optimizerResult");
+
+    if(!inputElement || !outputElement || !resultElement){
+        alert("Komponen Prompt Optimizer belum siap. Silakan buka ulang Prompt Optimizer.");
+        return;
+    }
+
+    const input=inputElement.value.trim();
+    if(!input){
+        alert("Masukkan Prompt Mentah terlebih dahulu.");
+        inputElement.focus();
+        return;
+    }
+
+    saveCurrentStudioFields();
+
+    const settings=studioSettings.optimizer||{};
+    const ctx=loadContext()||{};
+    const optimizationType=settings.optimizationType||"Perjelas Instruksi";
+    const purpose=settings.promptPurpose||"Umum";
+    const detail=settings.detailLevel||"Sedang";
+    const style=settings.outputStyle||"Natural";
+    const format=settings.outputFormat||"Teks";
+    const target=settings.targetAI||"AI Umum";
+    const extra=settings.optimizerNote||"";
+
+    const get=function(key){
+        return ctx[key] || "";
+    };
+
+    const contextParts=[];
+    if(get("jenjang")) contextParts.push("Jenjang " + get("jenjang"));
+    if(get("fase")) contextParts.push(get("fase"));
+    if(get("kelas")) contextParts.push("kelas " + get("kelas"));
+    if(get("mapel")) contextParts.push("mata pelajaran " + get("mapel"));
+    if(get("materi")) contextParts.push("materi " + get("materi"));
+    if(get("submateri")) contextParts.push("submateri " + get("submateri"));
+
+    const contextSentence=contextParts.length
+        ? contextParts.join(", ") + "."
+        : "Gunakan konteks pembelajaran yang tersedia.";
+
+    const realContext=get("konteks") || get("context") || "";
+    const time=get("alokasi") || "";
+
+    const detailInstruction={
+        "Ringkas":"Gunakan instruksi singkat dan langsung pada inti tugas.",
+        "Sedang":"Gunakan rincian yang cukup agar tugas jelas tetapi tetap ringkas.",
+        "Detail":"Gunakan rincian, batasan, dan kriteria output yang jelas.",
+        "Sangat Detail":"Gunakan instruksi lengkap, terstruktur, rinci, dan tetap relevan."
+    }[detail];
+
+    const formatInstruction={
+        "Teks":"Hasil akhir berupa teks yang jelas dan mudah dibaca.",
+        "Tabel":"Hasil akhir disajikan dalam tabel jika sesuai dengan jenis tugas.",
+        "Langkah-Langkah":"Hasil akhir disusun dalam langkah-langkah yang runtut.",
+        "Template":"Hasil akhir berupa template yang siap digunakan.",
+        "JSON":"Hasil akhir berupa JSON valid dan terstruktur.",
+        "Bebas":"Gunakan format output yang paling sesuai dengan tugas."
+    }[format];
+
+    let finalPrompt="";
+
+    if(optimizationType==="Perjelas Instruksi"){
+        finalPrompt=`Buat ${purpose.toLowerCase()} untuk ${contextSentence}\n\nTugas utama: ${input}\n\nJelaskan tugas dengan instruksi yang jelas, konkret, tidak ambigu, dan mudah diikuti. Pertahankan maksud utama dari prompt. ${detailInstruction} ${formatInstruction}${realContext ? "\nKonteks kehidupan nyata: " + realContext + "." : ""}${time ? "\nAlokasi waktu: " + time + "." : ""}${extra ? "\nInstruksi tambahan: " + extra : ""}`;
+
+    }else if(optimizationType==="Tambahkan Konteks"){
+        finalPrompt=`${input}\n\nSesuaikan tugas dengan konteks pembelajaran: ${contextSentence}${realContext ? " Gunakan konteks kehidupan nyata: " + realContext + "." : ""}${time ? " Alokasi waktu: " + time + "." : ""}\n\nGunakan konteks tersebut secara alami agar hasil relevan dengan peserta didik. Jangan mengubah tujuan utama dan jangan menambahkan fakta yang tidak tersedia. ${detailInstruction} ${formatInstruction}${extra ? "\nInstruksi tambahan: " + extra : ""}`;
+
+    }else if(optimizationType==="Strukturkan Prompt"){
+        finalPrompt=`KONTEKS\n${contextSentence}${realContext ? "\nKonteks kehidupan nyata: " + realContext + "." : ""}${time ? "\nAlokasi waktu: " + time + "." : ""}\n\nTUGAS\n${input}\n\nTUJUAN OUTPUT\n${purpose}\n\nINSTRUKSI\nKerjakan tugas sesuai konteks. Pertahankan maksud utama. Gunakan informasi yang tersedia. Jangan mengarang fakta.\n\nGAYA\n${style}\n\nFORMAT\n${formatInstruction}\n${detailInstruction}${extra ? "\n\nINSTRUKSI TAMBAHAN\n" + extra : ""}`;
+
+    }else if(optimizationType==="Buat Lebih Spesifik"){
+        const specificParts=[];
+        if(get("jenjang")) specificParts.push("siswa " + get("jenjang"));
+        if(get("fase")) specificParts.push(get("fase"));
+        if(get("kelas")) specificParts.push("kelas " + get("kelas"));
+        if(get("mapel")) specificParts.push("mata pelajaran " + get("mapel"));
+
+        const targetSentence=specificParts.length
+            ? specificParts.join(", ")
+            : "peserta didik";
+
+        const focusParts=[];
+        if(get("materi")) focusParts.push(get("materi"));
+        if(get("submateri")) focusParts.push("khususnya " + get("submateri"));
+
+        const focusSentence=focusParts.length
+            ? "Fokus pembahasan pada " + focusParts.join(", ") + "."
+            : "Fokus pembahasan mengikuti materi yang tersedia pada konteks pembelajaran.";
+
+        finalPrompt=`${input}\n\nSesuaikan materi untuk ${targetSentence}.\n${focusSentence}${realContext ? "\nGunakan " + realContext + " sebagai konteks utama pembelajaran." : ""}${time ? "\nSesuaikan dengan alokasi waktu " + time + "." : ""}\n${detailInstruction}\n${formatInstruction}${extra ? "\n" + extra : ""}`;
+
+    }else if(optimizationType==="Optimasi untuk AI"){
+        finalPrompt=`Tugas untuk ${target}: ${input}\n\nKonteks: ${contextSentence}${realContext ? " " + realContext + "." : ""}\n\nKerjakan tugas secara langsung. Gunakan instruksi eksplisit, urutan yang logis, istilah yang konsisten, dan jangan membuat asumsi yang tidak didukung informasi. Tujuan output: ${purpose}. ${detailInstruction} ${formatInstruction}${extra ? "\nInstruksi tambahan: " + extra : ""}`;
+
+    }else if(optimizationType==="Lengkapkan Prompt"){
+        const additions=[];
+        if(contextParts.length) additions.push("Sasaran: " + contextSentence);
+        if(realContext) additions.push("Konteks: " + realContext + ".");
+        if(time) additions.push("Alokasi waktu: " + time + ".");
+        if(purpose && purpose!=="Umum") additions.push("Tujuan penggunaan: " + purpose + ".");
+        if(style) additions.push("Gaya penyampaian: " + style + ".");
+        if(formatInstruction) additions.push(formatInstruction);
+        if(extra) additions.push("Instruksi tambahan: " + extra);
+
+        finalPrompt=`${input}${additions.length ? "\n\n"+additions.join("\n") : ""}`;
+
+    }else{
+        finalPrompt=input;
+    }
+
+    finalPrompt=finalPrompt.replace(/\n{3,}/g,"\n\n").trim();
+
+    outputElement.value=finalPrompt;
+    resultElement.style.display="block";
+
+    copyrightGuard(input);
+    if(typeof checkPromptQuality === "function") checkPromptQuality(outputElement.value);
+
+    if(typeof updateStatus === "function"){
+        updateStatus("● Prompt berhasil dioptimalkan — " + optimizationType);
+    }
+
+    resultElement.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+
+/* =====================================================
+STATUS
+===================================================== */
+
+function updateStatus(text){
+
+    document
+        .getElementById("status")
+        .textContent=text;
+
+}
+
+
+/* =====================================================
+ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+PROMPT QUALITY CHECKER — BUILD 8
+===================================================== */
+function checkPromptQuality(promptText){
+    const text=String(promptText||"").trim();
+    const box=document.getElementById("promptQualityChecker");
+    const scoreEl=document.getElementById("promptQualityScore");
+    const summaryEl=document.getElementById("promptQualitySummary");
+    const itemsEl=document.getElementById("promptQualityItems");
+    const tipsEl=document.getElementById("promptQualityTips");
+    if(!box||!scoreEl||!summaryEl||!itemsEl||!tipsEl)return;
+    const checks=[
+      {label:"Konteks",p:[/UNIVERSAL CONTEXT/i,/KONTEKS PEMBELAJARAN/i,/JENJANG:/i,/MATERI:/i]},
+      {label:"Sasaran peserta didik",p:[/SASARAN:/i,/PESERTA DIDIK/i,/SISWA/i]},
+      {label:"Tujuan",p:[/TUJUAN(?: PEMBELAJARAN| PENGGUNAAN)?:/i,/TUJUAN/i]},
+      {label:"Tugas utama",p:[/TUGAS:/i,/\bBUAT\b/i,/\bHASILKAN\b/i,/\bRANCANG\b/i]},
+      {label:"Bentuk hasil akhir",p:[/HASIL AKHIR/i,/OUTPUT/i,/FORMAT OUTPUT/i,/SLIDE/i,/PANEL/i]},
+      {label:"Instruksi spesifik",p:[/INSTRUKSI/i,/GUNAKAN/i,/TENTUKAN:/i,/WAJIB/i]},
+      {label:"Struktur output",p:[/STRUKTUR/i,/LANGKAH/i,/TAHAP/i,/FORMAT/i,/PER SCENE/i,/PER PANEL/i]},
+      {label:"Batasan/kriteria",p:[/HINDARI/i,/BATASAN/i,/KRITERIA/i,/DURASI/i,/JUMLAH/i,/ALOKASI/i]}
+    ];
+    let passed=0;
+    const results=checks.map(function(c){const ok=c.p.some(function(r){return r.test(text);});if(ok)passed++;return {label:c.label,ok:ok};});
+    const score=Math.round(passed/checks.length*100);
+    const level=score>=90?"Sangat kuat":score>=75?"Baik":score>=60?"Cukup":"Perlu dilengkapi";
+    scoreEl.textContent="📊 Prompt Quality: "+score+"/100 — "+level;
+    scoreEl.style.color=score>=90?"#15803D":score>=75?"#2563EB":score>=60?"#B45309":"#C2410C";
+    summaryEl.textContent="Pemeriksaan otomatis terhadap kelengkapan struktur prompt. Ini indikator kualitas awal, bukan penilaian mutlak.";
+    itemsEl.innerHTML=results.map(function(x){return (x.ok?"🟢":"🟡")+" "+escapeHTML(x.label)+(x.ok?" — sudah terdeteksi":" — masih dapat diperjelas");}).join("<br>");
+    const missing=results.filter(function(x){return !x.ok;}).map(function(x){return x.label;});
+    tipsEl.innerHTML=missing.length?"💡 <strong>Yang bisa diperbaiki:</strong> "+escapeHTML(missing.join(", "))+".":"✨ <strong>Komponen utama prompt sudah terdeteksi.</strong> Anda tetap dapat memperjelas detail sesuai kebutuhan.";
+    box.style.display="block";
+}
+
+/* =====================================================
+COPYRIGHT & SAFETY GUARD — BUILD 7.1
+===================================================== */
+
+function copyrightGuard(text, safetySource){
+    /* BUILD 12.1 — Safety Guard refinement
+       Safety checks user-originated content, not the studio's own
+       standard safety/IKAN boilerplate. This prevents false positives
+       when the generated prompt itself contains required safety wording.
+    */
+    const value=String(text||"");
+    const safetyValue=value;
+
+    /* ---------------- COPYRIGHT CHECK ---------------- */
+    const copyrightChecks=[
+        {pattern:/\b(disney|pixar|marvel|dc comics|warner bros|pokemon|pokémon|naruto|one piece|minecraft|harry potter|star wars)\b/i,label:"referensi karakter atau franchise terkenal"},
+        {pattern:/\b(tiru|meniru|salin|copy|persis seperti|exactly like|identik dengan)\b.{0,100}\b(gaya|style|karya|art|artist|seniman|ilustrasi|karakter|tokoh)\b/i,label:"permintaan meniru gaya, karya, atau karakter tertentu"},
+        {pattern:/\b(karakter|tokoh)\b.{0,60}\b(terkenal|superhero|film|serial|franchise|game)\b/i,label:"referensi karakter atau franchise terkenal"},
+        {pattern:/\b(sama persis|persis sekali|identik dengan|exactly the same|exact replica)\b/i,label:"permintaan kemiripan atau penyalinan secara persis"},
+        {pattern:/\b(logo|brand|merek dagang)\b.{0,80}\b(gunakan|masukkan|tampilkan|buat|sama)\b/i,label:"penggunaan logo atau merek spesifik"}
+    ];
+
+    const copyrightHits=copyrightChecks.filter(item=>item.pattern.test(value)).map(item=>item.label);
+
+    /* ---------------- SAFETY CHECK ---------------- */
+    const safetyChecks=[
+        {pattern:/\b(narkoba|narkotika|obat terlarang|zat terlarang|sabu|kokain|heroin|ganja|methamphetamine|metamfetamin|fentanyl)\b/i,label:"topik narkoba atau zat terlarang"},
+        {pattern:/\b(racun|bahan beracun|zat beracun|toksik|toxic)\b/i,label:"bahan atau zat beracun"},
+        {pattern:/\b(bahan peledak|bom|explosive|ledakan)\b/i,label:"bahan atau aktivitas berisiko ledakan"},
+        {pattern:/\b(asam kuat|basa kuat|asam pekat|basa pekat|korosif|cairan korosif)\b/i,label:"bahan kimia yang memerlukan pengamanan khusus"},
+        {pattern:/\b(membuat|meracik|memproduksi|mengekstrak|memurnikan|menggunakan|mengkonsumsi|cara pakai|cara membuat)\b.{0,100}\b(narkoba|narkotika|racun|bahan peledak|bom|zat terlarang)\b/i,label:"permintaan instruksi penggunaan atau pembuatan zat berbahaya"}
+    ];
+
+    const safetyHits=safetyChecks.filter(item=>item.pattern.test(safetyValue)).map(item=>item.label);
+
+    const box=document.getElementById("copyrightGuard");
+    const copyrightStatus=document.getElementById("copyrightGuardStatus");
+    const safetyStatus=document.getElementById("safetyGuardStatus");
+    if(!box || !copyrightStatus || !safetyStatus) return;
+
+    box.style.display="block";
+
+    /* Copyright result */
+    if(copyrightHits.length===0){
+        copyrightStatus.innerHTML="<strong style=\"color:#15803D;\">🟢 Copyright: Aman</strong> — tidak terdeteksi referensi spesifik yang memerlukan penyesuaian originalitas pada pemeriksaan dasar.";
+    }else{
+        copyrightStatus.innerHTML="<strong style=\"color:#B45309;\">🟡 Copyright: Perlu penyesuaian originalitas.</strong><br>"+
+            copyrightHits.map(function(h){return "• "+escapeHTML(h);}).join("<br>")+"<br><br>💡 Gunakan karakter, desain, identitas visual, dan elemen original dengan fungsi edukatif yang setara. Pemeriksaan ini adalah penyaring awal, bukan penilaian hukum.";
+    }
+
+    /* Safety result */
+    if(safetyHits.length===0){
+        safetyStatus.innerHTML="<strong style=\"color:#15803D;\">🟢 Safety: Aman</strong> — tidak terdeteksi indikator keselamatan khusus pada pemeriksaan dasar.";
+    }else{
+        safetyStatus.innerHTML="<strong style=\"color:#C2410C;\">🟠 Safety: Perlu perhatian.</strong><br>"+
+            safetyHits.map(function(h){return "• "+escapeHTML(h);}).join("<br>")+"<br><br>🧪 Gunakan konteks edukatif, pengawasan guru, APD dan SOP keselamatan yang sesuai. Hindari instruksi penggunaan, pembuatan, perolehan, atau penyalahgunaan zat/bahan berbahaya.";
+    }
+
+    if(copyrightHits.length===0 && safetyHits.length===0){
+        box.style.borderColor="#BBE7C8";
+        box.style.background="#F4FFF7";
+    }else if(copyrightHits.length>0 && safetyHits.length>0){
+        box.style.borderColor="#F6D58A";
+        box.style.background="#FFFBEB";
+    }else if(safetyHits.length>0){
+        box.style.borderColor="#FDBA74";
+        box.style.background="#FFF7ED";
+    }else{
+        box.style.borderColor="#F6D58A";
+        box.style.background="#FFFBEB";
+    }
+}
+
+/* =====================================================
+PROMPT EXPORT CENTER — BUILD 13
+===================================================== */
+function getPromptExportText(){
+    const output=document.getElementById("promptOutput");
+    return output ? output.value.trim() : "";
+}
+
+function getPromptExportFilename(extension){
+    const studio=(studioLabels && studioLabels[selectedStudio]) ? studioLabels[selectedStudio] : (selectedStudio || "Prompt");
+    const idea=(localStorage.getItem("guruAI_currentIdea") || studio).replace(/[^a-z0-9\u00C0-\u024F\u1E00-\u1EFF]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,60) || "Prompt";
+    return "GURU_AI_STUDIO_"+idea+"."+extension;
+}
+
+function setPromptExportStatus(message){
+    const el=document.getElementById("promptExportStatus");
+    if(el) el.textContent=message;
+}
+
+function getPromptCompareOriginal(){
+    return (localStorage.getItem("guruAI_smartEnhancerOriginalPrompt") || "").trim();
+}
+
+function wordCountPromptCompare(text){
+    return String(text||"").split(/\s+/).filter(Boolean).length;
+}
+
+function getLineDiffStats(original,current){
+    const a=String(original||"").split(/\n/);
+    const b=String(current||"").split(/\n/);
+    const max=Math.max(a.length,b.length);
+    let changed=0, added=0, removed=0;
+    for(let i=0;i<max;i++){
+        const av=a[i] ?? "";
+        const bv=b[i] ?? "";
+        if(av!==bv){
+            changed++;
+            if(!av && bv) added++;
+            else if(av && !bv) removed++;
+        }
+    }
+    return {changed,added,removed,originalLines:a.length,currentLines:b.length};
+}
+
+function togglePromptCompare(){
+    const panel=document.getElementById("promptComparePanel");
+    const output=document.getElementById("promptOutput");
+    if(!panel||!output)return;
+    if(panel.style.display!=="none" && panel.style.display){
+        panel.style.display="none";
+        return;
+    }
+
+    const original=getPromptCompareOriginal();
+    const current=output.value.trim();
+    const originalBox=document.getElementById("promptCompareOriginal");
+    const currentBox=document.getElementById("promptCompareCurrent");
+    const summary=document.getElementById("promptCompareSummary");
+
+    if(!current){
+        alert("Belum ada prompt untuk dibandingkan. Silakan Generate Prompt terlebih dahulu.");
+        return;
+    }
+    if(!original){
+        if(originalBox)originalBox.textContent="Versi asli belum tersedia. Generate Prompt terlebih dahulu untuk membuat baseline perbandingan.";
+        if(currentBox)currentBox.textContent=current;
+        if(summary)summary.textContent="Belum ada baseline versi asli.";
+        panel.style.display="block";
+        return;
+    }
+
+    const stats=getLineDiffStats(original,current);
+    const same=original===current;
+    if(summary){
+        summary.textContent=same
+            ? "✓ Belum ada perubahan dari versi asli. Kedua prompt masih sama."
+            : "Perubahan terdeteksi • "+stats.changed+" baris berbeda • Versi asli "+wordCountPromptCompare(original)+" kata • Versi saat ini "+wordCountPromptCompare(current)+" kata.";
+    }
+    if(originalBox)originalBox.textContent=original;
+    if(currentBox)currentBox.textContent=current;
+    panel.style.display="block";
+}
+
+function togglePromptExport(){
+    const panel=document.getElementById("promptExportPanel");
+    if(!panel) return;
+    const output=getPromptExportText();
+    if(!output){
+        alert("Belum ada prompt untuk diekspor. Silakan Generate Prompt terlebih dahulu.");
+        return;
+    }
+    panel.style.display=panel.style.display==="none" ? "block" : "none";
+}
+
+function downloadPromptFile(content, filename, mime){
+    const blob=new Blob([content],{type:mime});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=url;
+    link.download=filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+
+function exportPromptTxt(){
+    const text=getPromptExportText();
+    if(!text){alert("Belum ada prompt untuk diekspor.");return;}
+    downloadPromptFile(text,getPromptExportFilename("txt"),"text/plain;charset=utf-8");
+    setPromptExportStatus("✓ Prompt berhasil diekspor sebagai TXT.");
+    updateStatus("● Prompt diekspor sebagai TXT");
+}
+
+function exportPromptWord(){
+    const text=getPromptExportText();
+    if(!text){alert("Belum ada prompt untuk diekspor.");return;}
+    const safe=escapeLibraryHtml(text).replace(/\n/g,"<br>");
+    const html="<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>GURU AI STUDIO</title></head><body style=\"font-family:Arial,sans-serif;line-height:1.6;\"><h2>GURU AI STUDIO</h2><p><strong>Prompt</strong></p><div>"+safe+"</div></body></html>";
+    downloadPromptFile(html,getPromptExportFilename("doc"),"application/msword;charset=utf-8");
+    setPromptExportStatus("✓ Prompt berhasil diekspor sebagai Word (.doc).");
+    updateStatus("● Prompt diekspor sebagai Word");
+}
+
+function exportPromptPdf(){
+    const text=getPromptExportText();
+    if(!text){alert("Belum ada prompt untuk diekspor.");return;}
+    const printWindow=window.open("","_blank","width=900,height=700");
+    if(!printWindow){
+        alert("Jendela cetak diblokir browser. Izinkan pop-up untuk mengekspor PDF.");
+        return;
+    }
+    const safe=escapeLibraryHtml(text).replace(/\n/g,"<br>");
+    printWindow.document.write("<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>GURU AI STUDIO - Prompt</title><style>body{font-family:Arial,sans-serif;margin:40px;line-height:1.6;color:#111827}h1{font-size:20px}pre{white-space:pre-wrap;font:inherit}</style></head><body><h1>GURU AI STUDIO</h1><pre>"+safe.replace(/<br>/g,"\n")+"</pre></body></html>");
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function(){printWindow.print();},300);
+    setPromptExportStatus("✓ Dialog cetak dibuka. Pilih Save as PDF untuk menyimpan sebagai PDF.");
+    updateStatus("● Dialog PDF/Cetak dibuka");
+}
+
+/* =====================================================
+PROMPT LIBRARY — BUILD 6
+===================================================== */
+
+let libraryFavoritesOnly=false;
+
+function getPromptLibrary(){
+    try{
+        const saved=localStorage.getItem("guruAI_promptLibrary");
+        const data=saved ? JSON.parse(saved) : [];
+        return Array.isArray(data) ? data : [];
+    }catch(error){ console.error(error); return []; }
+}
+
+function setPromptLibrary(items){
+    localStorage.setItem("guruAI_promptLibrary",JSON.stringify(items));
+}
+
+function savePromptToLibrary(){
+    const output=document.getElementById("promptOutput");
+    if(!output || !output.value.trim()){
+        alert("Belum ada prompt untuk disimpan. Silakan Generate Prompt terlebih dahulu.");
+        return;
+    }
+    const defaultTitle=(localStorage.getItem("guruAI_currentIdea") || "Prompt " + (studioLabels[selectedStudio] || selectedStudio)).replace(/\s+/g," ").trim().slice(0,80);
+    const title=prompt("Beri nama prompt ini:",defaultTitle);
+    if(title===null) return;
+    if(!title.trim()){ alert("Nama prompt belum diisi."); return; }
+    const items=getPromptLibrary();
+    items.unshift({
+        id:"p_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+        title:title.trim(),
+        studio:selectedStudio,
+        studioLabel:studioLabels[selectedStudio] || selectedStudio,
+        mode:selectedMode,
+        prompt:output.value,
+        favorite:false,
+        createdAt:new Date().toISOString()
+    });
+    setPromptLibrary(items);
+    updateStatus("● Prompt disimpan ke Library");
+    alert("Prompt berhasil disimpan ke Prompt Library.");
+}
+
+function escapeLibraryHtml(value){
+    return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function renderPromptLibrary(forceFavorites){
+    if(typeof forceFavorites === "boolean") libraryFavoritesOnly=forceFavorites;
+    const container=document.getElementById("promptLibraryList");
+    const count=document.getElementById("libraryCount");
+    if(!container) return;
+    const search=(document.getElementById("librarySearch")?.value || "").trim().toLowerCase();
+    let items=getPromptLibrary();
+    if(libraryFavoritesOnly) items=items.filter(item=>item.favorite);
+    if(search) items=items.filter(item=>[item.title,item.studioLabel,item.prompt].join(" ").toLowerCase().includes(search));
+    const total=getPromptLibrary().length;
+    if(count) count.textContent=total ? `${items.length} prompt ditampilkan dari ${total} prompt tersimpan.` : "Belum ada prompt tersimpan.";
+    if(!items.length){
+        container.innerHTML=`<div class="empty"><div class="empty-icon">📚</div><h3>${total ? "Prompt tidak ditemukan" : "Library masih kosong"}</h3><p>${total ? "Coba ubah kata kunci pencarian atau tampilkan semua." : "Generate prompt terlebih dahulu, lalu klik Simpan ke Library."}</p></div>`;
+        return;
+    }
+    container.innerHTML=items.map(item=>{
+        const date=item.createdAt ? new Date(item.createdAt).toLocaleString("id-ID") : "";
+        return `<div class="card" style="margin-top:14px;border:1px solid #E2E8F0;box-shadow:none;">
+            <div class="result-header"><div><div class="result-title">${escapeLibraryHtml(item.title || "Tanpa Judul")}</div><div class="help">${escapeLibraryHtml(item.studioLabel || item.studio || "Prompt")} · ${escapeLibraryHtml(date)}</div></div><div style="font-size:22px;">${item.favorite ? "⭐" : "☆"}</div></div>
+            <div style="font-size:12px;line-height:1.6;color:#475569;max-height:92px;overflow:hidden;white-space:pre-wrap;">${escapeLibraryHtml(item.prompt)}</div>
+            <div class="action-row"><button class="btn btn-primary" type="button" onclick="useLibraryPrompt('${item.id}')">▶ Gunakan</button><button class="btn btn-secondary" type="button" onclick="toggleLibraryFavorite('${item.id}')">${item.favorite ? "☆ Hapus Favorit" : "⭐ Favorit"}</button><button class="btn btn-secondary" type="button" onclick="deleteLibraryPrompt('${item.id}')">🗑️ Hapus</button></div>
+        </div>`;
+    }).join("");
+}
+
+function useLibraryPrompt(id){
+    const item=getPromptLibrary().find(entry=>entry.id===id);
+    if(!item) return;
+    selectedStudio=item.studio || "learning";
+    navigate("learning");
+    setTimeout(function(){
+        const output=document.getElementById("promptOutput");
+        if(output) output.value=item.prompt || "";
+        const result=document.getElementById("promptResult");
+        if(result) result.classList.add("show");
+        const studioResult=document.getElementById("resultStudio");
+        if(studioResult) studioResult.textContent=item.studioLabel || item.studio || "Prompt";
+        const modeResult=document.getElementById("resultMode");
+        if(modeResult) modeResult.textContent=(item.mode || "simple").charAt(0).toUpperCase()+(item.mode || "simple").slice(1);
+        if(output) output.scrollIntoView({behavior:"smooth",block:"center"});
+    },100);
+}
+
+function toggleLibraryFavorite(id){
+    const items=getPromptLibrary(); const item=items.find(entry=>entry.id===id);
+    if(!item) return; item.favorite=!item.favorite; setPromptLibrary(items); renderPromptLibrary();
+}
+
+function deleteLibraryPrompt(id){
+    const item=getPromptLibrary().find(entry=>entry.id===id);
+    if(!item) return;
+    if(!confirm(`Hapus prompt "${item.title}" dari Library?`)) return;
+    setPromptLibrary(getPromptLibrary().filter(entry=>entry.id!==id));
+    renderPromptLibrary(); updateStatus("● Prompt dihapus dari Library");
+}
+
+function clearLibraryFilter(){
+    libraryFavoritesOnly=false;
+    const search=document.getElementById("librarySearch"); if(search) search.value="";
+    renderPromptLibrary();
+}
+
+/* =====================================================
+CONTEXT EDITOR BRIDGE
+===================================================== */
+
+function showContextEditor(){
+    navigate("context");
+    setTimeout(function(){ loadContextIntoEditor(); },80);
+}
+
+function loadContextIntoEditor(){
+    const ctx=loadContext();
+    const fields={
+        ctxJenjang:ctx?.jenjang||"", ctxFase:ctx?.fase||"", ctxKelas:ctx?.kelas||"",
+        ctxMapel:ctx?.mapel||"", ctxMateri:ctx?.materi||"", ctxSubmateri:ctx?.submateri||"",
+        ctxKonteks:ctx?.konteks||ctx?.konteksKehidupan||"", ctxAlokasi:ctx?.alokasi||"",
+        ctxKurikulum:ctx?.kurikulum||"Kurikulum Merdeka", ctxCP:ctx?.cp||"", ctxTP:ctx?.tp||"",
+        ctxATP:ctx?.atp||"", ctxModel:ctx?.model||""
+    };
+    Object.keys(fields).forEach(id=>{ const el=document.getElementById(id); if(el) el.value=fields[id]; });
+    const st=document.getElementById("contextEditorStatus");
+    if(st) st.textContent=ctx ? "● Context aktif dimuat. Anda dapat mengubahnya." : "● Belum ada Context aktif. Silakan isi form.";
+}
+
+function saveUniversalContext(){
+    const value=id=>{ const el=document.getElementById(id); return el ? el.value.trim() : ""; };
+    const ctx={
+        jenjang:value("ctxJenjang"), fase:value("ctxFase"), kelas:value("ctxKelas"), mapel:value("ctxMapel"),
+        materi:value("ctxMateri"), submateri:value("ctxSubmateri"), konteks:value("ctxKonteks"),
+        alokasi:value("ctxAlokasi"), kurikulum:value("ctxKurikulum"), cp:value("ctxCP"), tp:value("ctxTP"),
+        atp:value("ctxATP"), model:value("ctxModel"), approach:[],
+        deepLearning:{memahami:true,mengaplikasikan:true,merefleksikan:true},
+        literacy:{enabled:false,activities:[]}, numeracy:{enabled:false,activities:[]},
+        ikan:{enabled:false,level:"",context:""}, assessment:{type:"",level:"",orientation:""}
+    };
+    const old=loadContext();
+    if(old){
+        ctx.approach=Array.isArray(old.approach)?old.approach:[];
+        ctx.deepLearning=old.deepLearning||ctx.deepLearning;
+        ctx.literacy=old.literacy||ctx.literacy;
+        ctx.numeracy=old.numeracy||ctx.numeracy;
+        ctx.ikan=old.ikan||ctx.ikan;
+        ctx.assessment=old.assessment||ctx.assessment;
+    }
+    if(!ctx.jenjang || !ctx.mapel || !ctx.materi){
+        alert("Minimal isi Jenjang, Mata Pelajaran, dan Materi."); return;
+    }
+    localStorage.setItem("guruAI_context",JSON.stringify(ctx));
+    currentContext=ctx;
+    refreshContextSummary(); renderApproachChoices(); updateSTEMStatus();
+    const st=document.getElementById("contextEditorStatus");
+    if(st) st.textContent="✓ Universal Context berhasil disimpan dan menjadi Context aktif.";
+    updateStatus("● Universal Context diperbarui");
+}
+
+function newUniversalContext(){
+    if(!confirm("Buat Context baru? Context aktif saat ini akan dihapus dari Context aktif. Prompt Library, History, Favorite, dan Settings tetap aman.")) return;
+    localStorage.removeItem("guruAI_context");
+    currentContext=null;
+    localStorage.removeItem("guruAI_currentIdea");
+    localStorage.removeItem("guruAI_oneIdeaActive");
+    const ids=["ctxJenjang","ctxFase","ctxKelas","ctxMapel","ctxMateri","ctxSubmateri","ctxKonteks","ctxAlokasi","ctxCP","ctxTP","ctxATP","ctxModel"];
+    ids.forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
+    const kur=document.getElementById("ctxKurikulum"); if(kur) kur.value="Kurikulum Merdeka";
+    refreshContextSummary(); renderApproachChoices(); updateSTEMStatus();
+    const st=document.getElementById("contextEditorStatus");
+    if(st) st.textContent="● Context aktif dikosongkan. Silakan isi Context baru.";
+    updateStatus("● Context baru siap dibuat");
+}
+
+
+/* =====================================================
+BUILD 12 — QUICK TEMPLATES
+===================================================== */
+
+const quickTemplates=[
+    ["📚","Rancang Pembelajaran","Rancang pembelajaran yang kontekstual, aktif, bermakna, dan sesuai karakteristik peserta didik untuk materi [MATERI] pada jenjang [JENJANG/KELAS]."],
+    ["📝","Buat Soal HOTS","Buat asesmen tentang [MATERI] untuk [JENJANG/KELAS] dengan soal yang menuntut analisis dan penerapan konsep secara kontekstual."],
+    ["📄","Buat LKPD","Buat LKPD aktivitas peserta didik tentang [MATERI] untuk [JENJANG/KELAS], lengkap dengan tujuan, aktivitas, data pengamatan, pertanyaan, dan refleksi."],
+    ["📊","Buat PPT","Buat rancangan presentasi pembelajaran tentang [MATERI] untuk [JENJANG/KELAS] dengan struktur yang jelas, visual edukatif, aktivitas, dan refleksi."],
+    ["🖼️","Buat Gambar Edukasi","Buat konsep gambar edukatif original tentang [MATERI] untuk [JENJANG/KELAS] dengan visual yang jelas, menarik, dan sesuai usia."],
+    ["🎬","Buat Video Edukasi","Buat prompt video edukasi original tentang [MATERI] untuk [JENJANG/KELAS], lengkap dengan adegan, aksi, kamera, audio, dan konsistensi visual."],
+    ["🧪","Buat Virtual Lab","Buat rancangan laboratorium virtual tentang [MATERI] untuk [JENJANG/KELAS] dengan interaksi, pengamatan, data, feedback, dan keselamatan."],
+    ["🎮","Buat Game Edukasi","Buat konsep game edukasi tentang [MATERI] untuk [JENJANG/KELAS] dengan mekanisme permainan, tantangan, feedback, dan tujuan belajar."],
+    ["🔬","Buat Proyek STEM","Buat proyek STEM kontekstual tentang [MATERI] untuk [JENJANG/KELAS] dengan masalah nyata, proses desain, data, produk/solusi, dan refleksi."],
+    ["🗣️","Buat Narasi","Buat naskah narasi pembelajaran tentang [MATERI] untuk [JENJANG/KELAS] dengan bahasa natural, terstruktur, menarik, dan mudah dipahami." ]
+];
+
+let favoriteTemplatesOnly=false;
+
+function getFavoriteTemplates(){
+    try{
+        const data=JSON.parse(localStorage.getItem("guruAI_favoriteTemplates")||"[]");
+        return Array.isArray(data) ? data : [];
+    }catch(e){
+        return [];
+    }
+}
+
+function setFavoriteTemplates(items){
+    localStorage.setItem("guruAI_favoriteTemplates",JSON.stringify(items));
+}
+
+function isFavoriteTemplate(index){
+    return getFavoriteTemplates().includes(index);
+}
+
+function toggleFavoriteTemplate(index){
+    const favorites=getFavoriteTemplates();
+    const pos=favorites.indexOf(index);
+    if(pos===-1){
+        favorites.push(index);
+        updateStatus("● Template ditambahkan ke Favorit");
+    }else{
+        favorites.splice(pos,1);
+        updateStatus("● Template dihapus dari Favorit");
+    }
+    setFavoriteTemplates(favorites);
+    renderQuickTemplates();
+}
+
+function toggleFavoriteTemplates(){
+    favoriteTemplatesOnly=!favoriteTemplatesOnly;
+    renderQuickTemplates();
+}
+
+function renderQuickTemplates(){
+    const grid=document.getElementById("quickTemplateGrid");
+    if(!grid) return;
+    const favorites=getFavoriteTemplates();
+    const visible=quickTemplates.map(function(item,index){
+        return {item:item,index:index};
+    }).filter(function(entry){
+        return !favoriteTemplatesOnly || favorites.includes(entry.index);
+    });
+
+    const toggle=document.getElementById("favoriteTemplatesToggle");
+    if(toggle){
+        toggle.textContent=favoriteTemplatesOnly ? "📚 Semua Template" : "⭐ Hanya Favorit";
+        toggle.classList.toggle("btn-success",favoriteTemplatesOnly);
+        toggle.classList.toggle("btn-secondary",!favoriteTemplatesOnly);
+    }
+
+    if(!visible.length){
+        grid.innerHTML=`<div style="grid-column:1/-1;padding:24px;text-align:center;color:#64748B;border:1px dashed #CBD5E1;border-radius:14px;">
+            ⭐ Belum ada template favorit. Klik ikon ⭐ pada template yang ingin disimpan.
+        </div>`;
+        return;
+    }
+
+    grid.innerHTML=visible.map(function(entry){
+        const item=entry.item;
+        const index=entry.index;
+        const favorite=favorites.includes(index);
+        return `<div class="card" style="text-align:left;border:1px solid #E2E8F0;background:#fff;position:relative;">
+            <button type="button" title="${favorite ? "Hapus dari Favorit" : "Tambah ke Favorit"}" onclick="toggleFavoriteTemplate(${index})" style="position:absolute;top:10px;right:10px;border:1px solid #E2E8F0;background:#fff;border-radius:10px;width:34px;height:34px;cursor:pointer;font-size:17px;">${favorite ? "⭐" : "☆"}</button>
+            <div style="font-size:24px;">${item[0]}</div>
+            <div style="font-weight:800;margin-top:8px;padding-right:40px;">${item[1]}</div>
+            <div style="font-size:11px;color:#64748B;line-height:1.5;margin-top:6px;">${item[2]}</div>
+            <button type="button" class="btn btn-secondary" style="margin-top:12px;font-size:11px;" onclick="useQuickTemplate(${index})">Gunakan template →</button>
+        </div>`;
+    }).join("");
+}
+
+function useQuickTemplate(index){
+    const item=quickTemplates[index];
+    if(!item) return;
+    const input=document.getElementById("oneIdeaInput");
+    if(input) input.value=item[2];
+    localStorage.setItem("guruAI_quickTemplate",item[1]);
+    localStorage.setItem("guruAI_currentIdea",item[2]);
+    localStorage.removeItem("guruAI_oneIdeaActive");
+    updateStatus("● Template "+item[1]+" dipilih");
+    navigate("idea");
+    setTimeout(function(){
+        const target=document.getElementById("oneIdeaInput");
+        if(target) target.focus();
+    },80);
+}
+
+/* =====================================================
+STARTUP
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        /* ONE IDEA PANEL FIX: place the panel inside the main content area */
+        const oneIdeaPanel=document.getElementById("oneIdeaPanel");
+        const contentArea=document.querySelector(".content");
+        if(oneIdeaPanel && contentArea){
+            contentArea.appendChild(oneIdeaPanel);
+        }
+
+        const quickTemplatesPanel=document.getElementById("quickTemplatesPanel");
+        if(quickTemplatesPanel && contentArea){
+            contentArea.appendChild(quickTemplatesPanel);
+        }
+        renderQuickTemplates();
+
+        loadContext();
+        initAppSettings();
+
+        const idea=
+            localStorage.getItem(
+                "guruAI_currentIdea"
+            );
+
+        if(idea){
+
+            const input=
+                document.getElementById("ideaInput");
+
+            if(input){
+                input.value=idea;
+            }
+
+        }
+
+        navigate("dashboard");
+
+    }
+);
+
+loadStudioSettings();
+renderStudioFields();
+
+
+/* =====================================================
+BUILD 16 — SMART PROMPT SUGGESTIONS
+===================================================== */
+function toggleSmartSuggestions(){
+    const panel=document.getElementById("smartSuggestionsPanel");
+    if(!panel)return;
+    if(panel.style.display!=="none"){
+        panel.style.display="none";
+        return;
+    }
+    renderSmartSuggestions();
+    panel.style.display="block";
+    updateStatus("● Smart Prompt Suggestions dibuka");
+    setTimeout(function(){
+        panel.scrollIntoView({behavior:"smooth",block:"start"});
+    },50);
+}
+function getSmartSuggestionItems(prompt){const text=String(prompt||"");const items=[];const c=[[/tujuan pembelajaran|tujuan penggunaan|tujuan:/i,"🎯","Perjelas tujuan","Tambahkan tujuan pembelajaran yang terukur dan selaras dengan materi serta aktivitas pembelajaran."],[/kegiatan inti|aktivitas peserta didik|aktivitas:/i,"👥","Perkuat aktivitas siswa","Tambahkan aktivitas konkret peserta didik secara berurutan, termasuk eksplorasi, diskusi, penerapan konsep, dan komunikasi hasil jika relevan."],[/asesmen|penilaian/i,"📝","Tambahkan asesmen","Tambahkan asesmen yang selaras dengan tujuan pembelajaran serta jelaskan aspek yang dinilai."],[/output|hasil akhir|buat:/i,"📄","Perjelas output","Jelaskan bentuk output akhir yang harus dihasilkan, struktur utamanya, dan tingkat kedalaman yang diharapkan."],[/kriteria|indikator keberhasilan|rubrik/i,"✅","Tambahkan kriteria keberhasilan","Tambahkan indikator atau kriteria keberhasilan yang dapat digunakan untuk memeriksa kualitas hasil akhir."]];c.forEach(x=>{if(!x[0].test(text)&&items.length<5)items.push({icon:x[1],title:x[2],text:x[3],addition:x[3]});});if(!items.length)items.push({icon:"✨",title:"Prompt sudah terstruktur",text:"Tidak ditemukan kekurangan dasar pada pemeriksaan Smart Suggestions.",addition:""});return items;}
+function renderSmartSuggestions(){const panel=document.getElementById("smartSuggestionsPanel"),list=document.getElementById("smartSuggestionsList"),output=document.getElementById("promptOutput");if(!panel||!list||!output)return;const items=getSmartSuggestionItems(output.value);list.innerHTML=items.map((x,i)=>`<div class="smart-suggestion-item"><div class="smart-suggestion-icon">${x.icon}</div><div class="smart-suggestion-body"><strong>${escapeHTML(x.title)}</strong><div>${escapeHTML(x.text)}</div></div>${x.addition?`<button class="btn btn-secondary" type="button" onclick="applySmartSuggestion(${i})">+ Terapkan Saran</button>`:""}</div>`).join("");panel.dataset.suggestions=JSON.stringify(items);}
+function applySmartSuggestion(index){const panel=document.getElementById("smartSuggestionsPanel"),output=document.getElementById("promptOutput");if(!panel||!output)return;let items=[];try{items=JSON.parse(panel.dataset.suggestions||"[]")}catch(e){}const x=items[index];if(!x||!x.addition)return;if(!output.value.includes(x.addition))output.value=output.value.trim()+"\n\n"+x.addition;savePromptHistory("Smart Suggestion — "+x.title,output.value);updatePromptActionCenter();if(typeof checkPromptQuality==="function")checkPromptQuality(output.value);updateStatus("● Saran diterapkan: "+x.title);renderSmartSuggestions();}
+
+/* =====================================================
+PROMPT WORKSPACE — BUILD 15
+===================================================== */
+function togglePromptWorkspace(){
+    const panel=document.getElementById("promptWorkspacePanel");
+    const output=document.getElementById("promptOutput");
+    if(!panel||!output)return;
+    if(!output.value.trim()){
+        alert("Belum ada prompt untuk dibuka di Workspace. Silakan Generate Prompt terlebih dahulu.");
+        return;
+    }
+    const isOpen=panel.style.display!=="none";
+    if(isOpen){
+        panel.style.display="none";
+        return;
+    }
+    renderPromptWorkspace();
+    panel.style.display="block";
+    updateStatus("● Prompt Workspace dibuka");
+}
+
+function renderPromptWorkspace(){
+    const output=document.getElementById("promptOutput");
+    const originalBox=document.getElementById("workspaceOriginal");
+    const status=document.getElementById("workspaceStatus");
+    if(!output||!originalBox)return;
+    const original=(localStorage.getItem("guruAI_smartEnhancerOriginalPrompt") || localStorage.getItem("guruAI_smartEnhancerBaseline") || output.value || "").trim();
+    originalBox.textContent=original || "Belum tersedia.";
+    if(status){
+        const current=output.value.trim();
+        status.textContent=current===original ? "✓ Belum ada perubahan" : "✏️ Prompt sudah diedit/dioptimalkan";
+        status.style.background=current===original ? "#DCFCE7" : "#FEF3C7";
+        status.style.color=current===original ? "#166534" : "#92400E";
+    }
+}
+
+function focusPromptWorkspaceEditor(){
+    const output=document.getElementById("promptOutput");
+    if(!output)return;
+    output.focus();
+    output.setSelectionRange(output.value.length,output.value.length);
+    updateStatus("● Editor prompt aktif");
+}
+
+</script>
+
+</body>
+</html>
+```
