@@ -1266,6 +1266,23 @@ PROMPT STUDIO
             </div>
             <div id="approachChoiceList" style="display:flex;flex-wrap:wrap;gap:7px;"></div>
             <div id="approachChoiceStatus" style="font-size:9px;color:#64748B;margin-top:9px;">Belum ada pendekatan yang dipilih.</div>
+            <div id="ikanApproachFields" style="display:none;margin-top:12px;padding:12px;border:1px solid #D1FAE5;border-radius:12px;background:#F0FDFA;">
+                <div style="font-size:10px;font-weight:700;color:#0F766E;margin-bottom:6px;">🛡️ Pengaturan IKAN</div>
+                <div style="font-size:9px;color:#64748B;margin-bottom:9px;line-height:1.5;">Opsional. Gunakan jika relevan dengan tujuan pembelajaran. Integrasi bersifat edukatif, preventif, kontekstual, dan proporsional.</div>
+                <div class="form-group">
+                    <label>Level Integrasi</label>
+                    <select id="ikanApproachLevel" onchange="saveIKANApproach()">
+                        <option value="">Pilih level integrasi</option>
+                        <option>Integrasi ringan</option>
+                        <option>Integrasi kontekstual</option>
+                        <option>Integrasi mendalam</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Konteks IKAN</label>
+                    <textarea id="ikanApproachContext" oninput="saveIKANApproach()" placeholder="Contoh: pencegahan penyalahgunaan zat dan pengambilan keputusan sehat dalam kehidupan siswa."></textarea>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -1691,6 +1708,7 @@ CONTEXT PAGE
         <div class="form-group"><label>TP</label><textarea id="ctxTP" placeholder="Tujuan Pembelajaran (opsional)"></textarea></div>
         <div class="form-group"><label>ATP</label><textarea id="ctxATP" placeholder="Alur Tujuan Pembelajaran (opsional)"></textarea></div>
         <div class="form-group"><label>Model Pembelajaran</label><input id="ctxModel" type="text" placeholder="Contoh: PBL, PJBL, Discovery"></div>
+
 
         <div class="action-row">
             <button class="btn btn-primary" type="button" onclick="saveUniversalContext()">💾 Simpan Context</button>
@@ -2636,7 +2654,8 @@ const approachChoices=[
     "Diferensiasi",
     "Kontekstual",
     "Literasi",
-    "Numerasi"
+    "Numerasi",
+    "🛡️ IKAN"
 ];
 
 function renderApproachChoices(){
@@ -2646,19 +2665,70 @@ function renderApproachChoices(){
 
     const ctx=loadContext()||{};
     const approaches=Array.isArray(ctx.approach) ? ctx.approach : [];
+    const ikanActive=!!(ctx.ikan && ctx.ikan.enabled===true);
 
     list.innerHTML=approachChoices.map(name=>{
-        const active=approaches.includes(name);
+        const isIkan=name==="🛡️ IKAN";
+        const active=isIkan ? ikanActive : approaches.includes(name);
         return `<button type="button" class="btn ${active ? "btn-success" : "btn-secondary"}"
             style="font-size:10px;padding:7px 10px;"
-            onclick="toggleApproach('${name}')">${active ? "✓ " : ""}${name}</button>`;
+            onclick="${isIkan ? "toggleIKAN()" : "toggleApproach('"+name+"')"}">${active ? "✓ " : ""}${name}</button>`;
     }).join("");
 
     if(status){
-        status.textContent=approaches.length
-            ? "Aktif: " + approaches.join(", ")
+        const visibleApproaches=approaches.slice();
+        if(ikanActive) visibleApproaches.push("🛡️ IKAN");
+        status.textContent=visibleApproaches.length
+            ? "Aktif: " + visibleApproaches.join(", ")
             : "Belum ada pendekatan yang dipilih.";
     }
+
+    renderIKANFields();
+}
+
+function toggleIKAN(){
+    const ctx=loadContext();
+    if(!ctx){
+        alert("Universal Context belum tersedia. Isi konteks terlebih dahulu.");
+        return;
+    }
+
+    if(!ctx.ikan || typeof ctx.ikan!=="object"){
+        ctx.ikan={enabled:false,level:"",context:""};
+    }
+
+    ctx.ikan.enabled=!ctx.ikan.enabled;
+    localStorage.setItem("guruAI_context",JSON.stringify(ctx));
+    currentContext=ctx;
+    refreshContextSummary();
+    renderApproachChoices();
+    updateSTEMStatus();
+    updateStatus(ctx.ikan.enabled ? "● IKAN diaktifkan" : "● IKAN dinonaktifkan");
+}
+
+function renderIKANFields(){
+    const host=document.getElementById("ikanApproachFields");
+    if(!host) return;
+    const ctx=loadContext()||{};
+    const ikan=(ctx.ikan && typeof ctx.ikan==="object") ? ctx.ikan : {enabled:false,level:"",context:""};
+    host.style.display=ikan.enabled ? "block" : "none";
+    const level=document.getElementById("ikanApproachLevel");
+    const context=document.getElementById("ikanApproachContext");
+    if(level) level.value=ikan.level||"";
+    if(context) context.value=ikan.context||"";
+}
+
+function saveIKANApproach(){
+    const ctx=loadContext();
+    if(!ctx) return;
+    if(!ctx.ikan || typeof ctx.ikan!=="object") ctx.ikan={enabled:false,level:"",context:""};
+    const level=document.getElementById("ikanApproachLevel");
+    const context=document.getElementById("ikanApproachContext");
+    ctx.ikan.level=level ? level.value.trim() : "";
+    ctx.ikan.context=context ? context.value.trim() : "";
+    localStorage.setItem("guruAI_context",JSON.stringify(ctx));
+    currentContext=ctx;
+    updateStatus("● Pengaturan IKAN diperbarui");
 }
 
 function toggleApproach(name){
@@ -3516,7 +3586,9 @@ IKAN BLOCK
 
 function ikanBlock(ctx){
 
-    if(!ctx.ikan){
+    const ikan=ctx?.ikan;
+
+    if(!ikan || ikan.enabled!==true){
         return "";
     }
 
@@ -3524,16 +3596,19 @@ function ikanBlock(ctx){
         "Integrasikan IKAN (Integrasi Kurikulum Anti Narkoba) "+
         "secara edukatif, preventif, kontekstual, dan proporsional.";
 
-    if(ctx.ikanLevel){
+    const level=ikan.level || ctx.ikanLevel || "";
+    const context=ikan.context || ctx.ikanContext || "";
+
+    if(level){
         text+=
             "\nLevel integrasi: "+
-            ctx.ikanLevel+".";
+            level+".";
     }
 
-    if(ctx.ikanContext){
+    if(context){
         text+=
             "\nKonteks: "+
-            ctx.ikanContext+".";
+            context+".";
     }
 
     text+=
@@ -4341,6 +4416,18 @@ function generatePrompt(){
     saveCurrentStudioFields();
 
     const ctx={...baseCtx};
+
+    /* IKAN BRIDGE: sinkronkan struktur UI/storage dengan IKAN Prompt Engine. */
+    const ikanConfig=(baseCtx.ikan && typeof baseCtx.ikan === "object") ? baseCtx.ikan : {};
+    const ikanEnabled=Boolean(baseCtx.ikan===true || ikanConfig.enabled===true);
+    ctx.ikan={
+        enabled:ikanEnabled,
+        level:ikanConfig.level || baseCtx.ikanLevel || "",
+        context:ikanConfig.context || baseCtx.ikanContext || ""
+    };
+    ctx.ikanLevel=ctx.ikan.level;
+    ctx.ikanContext=ctx.ikan.context;
+
     const oneIdeaActive=localStorage.getItem("guruAI_oneIdeaActive")==="true";
     const oneIdea=(localStorage.getItem("guruAI_currentIdea") || "").trim();
 
@@ -5315,33 +5402,33 @@ function loadContextIntoEditor(){
         ctxMapel:ctx?.mapel||"", ctxMateri:ctx?.materi||"", ctxSubmateri:ctx?.submateri||"",
         ctxKonteks:ctx?.konteks||ctx?.konteksKehidupan||"", ctxAlokasi:ctx?.alokasi||"",
         ctxKurikulum:ctx?.kurikulum||"Kurikulum Merdeka", ctxCP:ctx?.cp||"", ctxTP:ctx?.tp||"",
-        ctxATP:ctx?.atp||"", ctxModel:ctx?.model||""
+        ctxATP:ctx?.atp||"", ctxModel:ctx?.model||"",
     };
-    Object.keys(fields).forEach(id=>{ const el=document.getElementById(id); if(el) el.value=fields[id]; });
+    Object.keys(fields).forEach(id=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        if(el.type==="checkbox") el.checked=!!fields[id];
+        else el.value=fields[id];
+    });
     const st=document.getElementById("contextEditorStatus");
     if(st) st.textContent=ctx ? "● Context aktif dimuat. Anda dapat mengubahnya." : "● Belum ada Context aktif. Silakan isi form.";
 }
 
 function saveUniversalContext(){
     const value=id=>{ const el=document.getElementById(id); return el ? el.value.trim() : ""; };
+    const old=loadContext();
+    const oldIkan=(old && old.ikan && typeof old.ikan==="object") ? old.ikan : {enabled:false,level:"",context:""};
     const ctx={
         jenjang:value("ctxJenjang"), fase:value("ctxFase"), kelas:value("ctxKelas"), mapel:value("ctxMapel"),
         materi:value("ctxMateri"), submateri:value("ctxSubmateri"), konteks:value("ctxKonteks"),
         alokasi:value("ctxAlokasi"), kurikulum:value("ctxKurikulum"), cp:value("ctxCP"), tp:value("ctxTP"),
-        atp:value("ctxATP"), model:value("ctxModel"), approach:[],
-        deepLearning:{memahami:true,mengaplikasikan:true,merefleksikan:true},
-        literacy:{enabled:false,activities:[]}, numeracy:{enabled:false,activities:[]},
-        ikan:{enabled:false,level:"",context:""}, assessment:{type:"",level:"",orientation:""}
+        atp:value("ctxATP"), model:value("ctxModel"), approach:Array.isArray(old?.approach)?old.approach:[],
+        ikan:oldIkan,
+        deepLearning:old?.deepLearning||{memahami:true,mengaplikasikan:true,merefleksikan:true},
+        literacy:old?.literacy||{enabled:false,activities:[]},
+        numeracy:old?.numeracy||{enabled:false,activities:[]},
+        assessment:old?.assessment||{type:"",level:"",orientation:""}
     };
-    const old=loadContext();
-    if(old){
-        ctx.approach=Array.isArray(old.approach)?old.approach:[];
-        ctx.deepLearning=old.deepLearning||ctx.deepLearning;
-        ctx.literacy=old.literacy||ctx.literacy;
-        ctx.numeracy=old.numeracy||ctx.numeracy;
-        ctx.ikan=old.ikan||ctx.ikan;
-        ctx.assessment=old.assessment||ctx.assessment;
-    }
     if(!ctx.jenjang || !ctx.mapel || !ctx.materi){
         alert("Minimal isi Jenjang, Mata Pelajaran, dan Materi."); return;
     }
@@ -5592,6 +5679,10 @@ function focusPromptWorkspaceEditor(){
     updateStatus("● Editor prompt aktif");
 }
 
+
+window.addEventListener("load",function(){
+    setTimeout(function(){ renderApproachChoices(); },120);
+});
 </script>
 
 </body>
